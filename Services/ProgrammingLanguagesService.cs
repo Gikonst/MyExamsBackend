@@ -1,4 +1,5 @@
-﻿using MyExamsBackend.Domain;
+﻿using Microsoft.EntityFrameworkCore;
+using MyExamsBackend.Domain;
 using MyExamsBackend.Models;
 using MyExamsBackend.Services.Interfaces;
 
@@ -22,7 +23,16 @@ namespace MyExamsBackend.Services
 
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            var dbResult = _context.ProgrammingLanguages.Where(x => x.Id == id).FirstOrDefault();
+
+            if (dbResult != null)
+            { 
+              _context.ProgrammingLanguages.Remove(dbResult);
+              var DeleteResult = _context.SaveChanges();
+
+              return DeleteResult > 0;             
+            }
+            return false;
         }
 
         public List<ProgrammingLanguage> GetAll()
@@ -41,7 +51,15 @@ namespace MyExamsBackend.Services
 
         public bool Update(ProgrammingLanguage programmingLanguage)
         {
-            throw new NotImplementedException();
+            var dbObject = _context.ProgrammingLanguages.AsNoTracking().Where(x => x.Id == programmingLanguage.Id).FirstOrDefault();
+            if (dbObject != null)
+            { 
+                _context.ProgrammingLanguages.Update(programmingLanguage);
+                var SaveResults = _context.SaveChanges();
+                return SaveResults > 0;
+            }
+            return false;
+
         }
     }
 }
