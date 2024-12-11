@@ -1,18 +1,23 @@
-﻿using MyExamsBackend.Models;
+﻿using MyExamsBackend.Domain;
+using MyExamsBackend.Models;
 using MyExamsBackend.Services.Interfaces;
 
 namespace MyExamsBackend.Services
 {
     public class ProgrammingLanguagesService : IProgrammingLanguagesService
     {
-        public ProgrammingLanguagesService()
+        private ApplicationDbContext _context;
+        public ProgrammingLanguagesService(ApplicationDbContext context)
         {
-
+            _context = context;
         }
 
         public bool Create(ProgrammingLanguage programmingLanguage)
         {
-            throw new NotImplementedException();
+            _context.ProgrammingLanguages.Add(programmingLanguage);
+            var changed = _context.SaveChanges();
+
+            return changed > 0;
         }
 
         public bool Delete(int id)
@@ -22,12 +27,16 @@ namespace MyExamsBackend.Services
 
         public List<ProgrammingLanguage> GetAll()
         {
-            throw new NotImplementedException();
+            var dbResults = _context.ProgrammingLanguages.ToList();
+
+            return dbResults;
         }
 
         public ProgrammingLanguage GetById(int id)
         {
-            throw new NotImplementedException();
+            var dbResult = _context.ProgrammingLanguages.Where(x => x.Id == id).FirstOrDefault();
+
+            return dbResult;
         }
 
         public bool Update(ProgrammingLanguage programmingLanguage)

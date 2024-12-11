@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MyExamsBackend.Domain;
+using MyExamsBackend.Services;
+using MyExamsBackend.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +11,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddScoped<IProgrammingLanguagesService, ProgrammingLanguagesService>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
