@@ -8,10 +8,12 @@
         public ProgrammingLanguage ProgrammingLanguage { get; set; }
         public List<Certificate> Certificates { get; set; }
         public List<Question> Questions { get; set; }
+        public List<User> Users { get; set; }
         public Exam()
         {
             Certificates = new List<Certificate>();
             Questions = new List<Question>();
+            Users = new List<User>();
         }
     }
 }
