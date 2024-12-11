@@ -6,10 +6,9 @@ namespace MyExamsBackend.Domain
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions dbContextoptions) : 
-            base(dbContextoptions)
+        public ApplicationDbContext(DbContextOptions dbContextoptions):base(dbContextoptions)
         {
-            
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
