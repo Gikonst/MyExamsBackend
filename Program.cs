@@ -12,6 +12,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IProgrammingLanguagesService, ProgrammingLanguagesService>();
+builder.Services.AddScoped<IExamsService, ExamsService>();
+builder.Services.AddScoped<ICertificatesService, CertificatesService>();
+builder.Services.AddScoped<IAnswersService, AnswersService>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
