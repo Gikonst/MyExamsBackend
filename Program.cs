@@ -15,9 +15,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IProgrammingLanguagesService, ProgrammingLanguagesService>();
 builder.Services.AddScoped<IQuestionsService,QuestionsService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
-builder.Services.AddScoped<IExamsService, ExamsService>()
-builder.Services.AddScoped<ICertificatesService, CertificatesService>()
-builder.Services.AddScoped<IAnswersService, AnswersService>()
+builder.Services.AddScoped<IExamsService, ExamsService>();
+builder.Services.AddScoped<ICertificatesService, CertificatesService>();
+builder.Services.AddScoped<IAnswersService, AnswersService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
