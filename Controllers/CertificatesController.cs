@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MyExamsBackend.DTOs.CertificateDTOs;
 using MyExamsBackend.Models;
 using MyExamsBackend.Services.Interfaces;
 
@@ -23,7 +24,7 @@ namespace MyExamsBackend.Controllers
             var results = _certificatesService.GetAll();
             if(!results.Any())
             {
-                return NotFound();
+                return NotFound("No Certificate found");
             }
             return Ok(results);
         }
@@ -34,31 +35,31 @@ namespace MyExamsBackend.Controllers
             var results = _certificatesService.GetById(id);
             if(results == null)
             {
-                return NotFound();
+                return NotFound("Could not find the certificate requested");
             }
             return Ok(results);
         }
 
         [HttpPost("Create")]
-        public IActionResult Create(Certificate certificate)
+        public IActionResult Create(CreateCertificateRequestDTO createCertificateRequestDto)
         {
-            var results = _certificatesService.Create(certificate);
+            var results = _certificatesService.Create(createCertificateRequestDto);
             if(results == false)
             {
-                return BadRequest();
+                return BadRequest("Invalid certificate");
             }
-            return Ok();
+            return Ok("New certificate created");
         }
 
         [HttpPut("Update")]
-        public IActionResult Update(Certificate certificate)
+        public IActionResult Update(UpdateCertificateRequestDTO updateCertificateRequestDto)
         {
-            var result = _certificatesService.Update(certificate);
+            var result = _certificatesService.Update(updateCertificateRequestDto);
             if(result == false)
             {
-                return BadRequest();
+                return BadRequest("Invalid Certificate");
             }
-            return Ok();
+            return Ok("Certificate Updated");
         }
 
         [HttpDelete("Delete")]
@@ -67,9 +68,9 @@ namespace MyExamsBackend.Controllers
             var results = _certificatesService.Delete(id);
             if(results == false)
             {
-                return BadRequest();
+                return BadRequest("Could not find the certificate requested");
             }
-            return Ok();
+            return Ok("Certificate deleted");
         }
     }
 }

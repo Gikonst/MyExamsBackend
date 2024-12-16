@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MyExamsBackend.DTOs.ExamDTOs;
 using MyExamsBackend.Models;
 using MyExamsBackend.Services.Interfaces;
 
@@ -23,7 +24,7 @@ namespace MyExamsBackend.Controllers
             var results = _examsService.GetAll();
             if(!results.Any())
             {
-                return NotFound();
+                return NotFound("No exam found");
             }
             return Ok(results);
         }
@@ -34,31 +35,31 @@ namespace MyExamsBackend.Controllers
             var results = _examsService.GetById(id);
             if(results == null)
             {
-                return NotFound();
+                return NotFound("Could not find the exam requested");
             }
             return Ok(results);
         }
 
         [HttpPost("Create")]
-        public IActionResult Create(Exam exam)
+        public IActionResult Create(CreateExamRequestDTO createExamRequestDto)
         {
-            var results = _examsService.Create(exam);
+            var results = _examsService.Create(createExamRequestDto);
             if(results == false)
             {
-                return BadRequest();
+                return BadRequest("Invalid exam");
             }
-            return Ok();
+            return Ok("Exam created");
         }
 
         [HttpPut("Update")]
-        public IActionResult Update(Exam exam)
+        public IActionResult Update(UpdateExamRequestDTO updateExamRequestDto)
         {
-            var results = _examsService.Update(exam);
+            var results = _examsService.Update(updateExamRequestDto);
             if(results == false)
             {
-                return BadRequest();
+                return BadRequest("Invalid exam");
             }
-            return Ok();
+            return Ok("Exam updated");
         }
 
         [HttpDelete("Delete")]
@@ -67,9 +68,9 @@ namespace MyExamsBackend.Controllers
             var results = _examsService.Delete(id);
             if (results == false)
             {
-                return BadRequest();
+                return BadRequest("Could not find the exam requested");
             }
-            return Ok();
+            return Ok("Exam deleted");
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MyExamsBackend.DTOs.ProgrammingLanguageDTOs;
 using MyExamsBackend.Models;
 using MyExamsBackend.Services;
 using MyExamsBackend.Services.Interfaces;
@@ -23,7 +24,7 @@ namespace MyExamsBackend.Controllers
             var results = _programmingLanguagesService.GetAll();
             if (!results.Any())
             {
-                return NotFound();
+                return NotFound("No programming language found");
             }
             return Ok(results);
         }
@@ -34,31 +35,31 @@ namespace MyExamsBackend.Controllers
             var results = _programmingLanguagesService.GetById(id);
             if (results == null)
             {
-                return NotFound();
+                return NotFound("Could not find the programming language requested");
             }
             return Ok(results);
         }
 
         [HttpPost("Create")]
-        public IActionResult Create(ProgrammingLanguage programmingLanguage)
+        public IActionResult Create(CreateProgrammingLanguageRequestDTO createProgrammingLanguageRequestDto)
         {
-            var results = _programmingLanguagesService.Create(programmingLanguage);
+            var results = _programmingLanguagesService.Create(createProgrammingLanguageRequestDto);
             if (results == false)
             {
-                return BadRequest();
+                return BadRequest("Invalid programming language");
             }
-            return Ok();
+            return Ok("Programming language created");
         }
 
         [HttpPut("Update")]
-        public IActionResult Update(ProgrammingLanguage programmingLanguage)
+        public IActionResult Update(UpdateProgrammingLanguageRequestDTO updateProgrammingLanguageRequestDto)
         {
-            var results = _programmingLanguagesService.Update(programmingLanguage);
+            var results = _programmingLanguagesService.Update(updateProgrammingLanguageRequestDto);
             if (results == false)
             {
-                return BadRequest();
+                return BadRequest("Invalid programming language");
             }
-            return Ok();
+            return Ok("Programming language updated");
         }
 
         [HttpDelete("Delete")]
@@ -67,9 +68,9 @@ namespace MyExamsBackend.Controllers
             var results = _programmingLanguagesService.Delete(id);
             if (results == false)
             {
-                return BadRequest();
+                return BadRequest("Could not find the programming language requested");
             }
-            return Ok();
+            return Ok("Programming language deleted");
         }
     }
 }

@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MyExamsBackend.DTOs.AnswerDTOs;
 using MyExamsBackend.Models;
 using MyExamsBackend.Services.Interfaces;
 
 namespace MyExamsBackend.Controllers
 {
+
     [ApiController]
     [Route("api/[controller]")]
     
@@ -23,7 +25,7 @@ namespace MyExamsBackend.Controllers
             var results = _answersService.GetAll();
             if (!results.Any())
             {
-                return NotFound();
+                return NotFound("No answer found");
             }
             return Ok(results);
         }
@@ -34,31 +36,31 @@ namespace MyExamsBackend.Controllers
             var results = _answersService.GetById(id);
             if(results == null)
             {
-                return NotFound();
+                return NotFound("Could not find the answer requested");
             }
-            return Ok();
+            return Ok(results);
         }
 
         [HttpPost("Create")]
-        public IActionResult Create(Answer answer)
+        public IActionResult Create(CreateAnswerRequestDTO createAnswerRequestDto)
         {
-            var results = _answersService.Create(answer);
+            var results = _answersService.Create(createAnswerRequestDto);
             if(results == false)
             {
-                return BadRequest();
+                return BadRequest("Invalid answer");
             }
-            return Ok();
+            return Ok("New answer created");
         }
 
         [HttpPut("Update")]
-        public IActionResult Update(Answer answer)
+        public IActionResult Update(UpdateAnswerRequestDTO updateAnswerRequestDto)
         {
-            var results = _answersService.Update(answer);
+            var results = _answersService.Update(updateAnswerRequestDto);
             if(results == false)
             {
-                return BadRequest();
+                return BadRequest("Invalid answer");
             }
-            return Ok();
+            return Ok("Answer updated");
         }
 
         [HttpDelete("Delete")]
@@ -67,9 +69,9 @@ namespace MyExamsBackend.Controllers
             var results = _answersService.Delete(id);
             if(results == false)
             {
-                return BadRequest();
+                return BadRequest("Could not find the answer requested");
             }
-            return Ok();
+            return Ok("Answer deleted");
         }
     }
 }

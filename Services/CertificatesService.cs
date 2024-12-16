@@ -1,5 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using MyExamsBackend.Domain;
+using MyExamsBackend.DTOs.AnswerDTOs;
+using MyExamsBackend.DTOs.CertificateDTOs;
 using MyExamsBackend.Models;
 using MyExamsBackend.Services.Interfaces;
 
@@ -8,14 +11,17 @@ namespace MyExamsBackend.Services
     public class CertificatesService : ICertificatesService
     {
         private ApplicationDbContext _context;
-        public CertificatesService(ApplicationDbContext context)
+        private readonly IMapper _mapper;
+        public CertificatesService(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         
-        public bool Create(Certificate certificate)
+        public bool Create(CreateCertificateRequestDTO createCertificateRequestDto)
         {
-            _context.Certificates.Add(certificate);
+            var mappedObject = _mapper.Map<Certificate>(createCertificateRequestDto);
+            _context.Certificates.Add(mappedObject);
             var changed = _context.SaveChanges();
 
             return changed > 0;
@@ -35,27 +41,30 @@ namespace MyExamsBackend.Services
             return false;
         }
 
-        public List<Certificate> GetAll()
+        public List<CertificateResponseDTO> GetAll()
         {
             var dbResults = _context.Certificates.ToList();
+            var mappedResults = _mapper.Map<List<CertificateResponseDTO>>(dbResults);
 
-            return dbResults;
+            return mappedResults;
         }
 
-        public Certificate GetById(int id)
+        public CertificateResponseDTO GetById(int id)
         {
             var dbResult = _context.Certificates.Where(x => x.Id == id).FirstOrDefault();
+            var mappedResults = _mapper.Map<CertificateResponseDTO>(dbResult);
 
-            return dbResult;
+            return mappedResults;
         }
 
-        public bool Update(Certificate certificate)
+        public bool Update(UpdateCertificateRequestDTO updateCertificateRequestDto)
         {
-            var dbObject = _context.Certificates.AsNoTracking().Where(x => x.Id == certificate.Id).FirstOrDefault();
+            var dbObject = _context.Certificates.AsNoTracking().Where(x => x.Id == updateCertificateRequestDto.Id).FirstOrDefault();
 
             if (dbObject != null)
             {
-                _context.Certificates.Update(certificate);
+                var mappedResults = _mapper.Map<Certificate>(updateCertificateRequestDto);
+                _context.Certificates.Update(mappedResults);
                 var saveResults = _context.SaveChanges();
 
                 return saveResults > 0;
