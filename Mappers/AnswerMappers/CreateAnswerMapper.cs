@@ -8,7 +8,7 @@ namespace MyExamsBackend.Mappers.AnswerMapper
     {
         public CreateAnswerMapper()
         {
-            CreateMap<CreateAnswerRequestDto, Answer>();
+            CreateMap<CreateAnswerRequestDTO, Answer>();
         }
     }
 }
