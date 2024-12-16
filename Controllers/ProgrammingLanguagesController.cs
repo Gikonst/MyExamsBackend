@@ -29,7 +29,7 @@ namespace MyExamsBackend.Controllers
             return Ok(results);
         }
 
-        [HttpGet("GetById")]
+        [HttpGet("GetById/{id}")]
         public IActionResult GetById(int id)
         {
             var results = _programmingLanguagesService.GetById(id);
@@ -41,7 +41,7 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpPost("Create")]
-        public IActionResult Create(CreateProgrammingLanguageRequestDTO createProgrammingLanguageRequestDto)
+        public IActionResult Create([FromBody]CreateProgrammingLanguageRequestDTO createProgrammingLanguageRequestDto)
         {
             var results = _programmingLanguagesService.Create(createProgrammingLanguageRequestDto);
             if (results == false)

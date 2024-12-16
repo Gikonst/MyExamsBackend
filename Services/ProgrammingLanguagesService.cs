@@ -42,7 +42,7 @@ namespace MyExamsBackend.Services
 
         public List<ProgrammingLanguageDTO> GetAll()
         {
-            var dbResults = _context.ProgrammingLanguages.Include(p => p.Exams).ToList();
+            var dbResults = _context.ProgrammingLanguages.AsNoTracking().ToList();
             var mappedResults = _mapper.Map<List<ProgrammingLanguageDTO>>(dbResults);
 
             return mappedResults;
@@ -50,7 +50,7 @@ namespace MyExamsBackend.Services
 
         public ProgrammingLanguageDTO GetById(int id)
         {
-            var dbResult = _context.ProgrammingLanguages.Where(x => x.Id == id).Include(p => p.Exams).FirstOrDefault();
+            var dbResult = _context.ProgrammingLanguages.Include(p => p.Exams).AsNoTracking().Where(x => x.Id == id).FirstOrDefault();
             var mappedResult = _mapper.Map<ProgrammingLanguageDTO>(dbResult);
 
             return mappedResult;

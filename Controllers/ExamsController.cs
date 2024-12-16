@@ -41,7 +41,7 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpPost("Create")]
-        public IActionResult Create(CreateExamRequestDTO createExamRequestDto)
+        public IActionResult Create([FromBody]CreateExamRequestDTO createExamRequestDto)
         {
             var results = _examsService.Create(createExamRequestDto);
             if(results == false)
