@@ -12,6 +12,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IProgrammingLanguagesService, ProgrammingLanguagesService>();
+builder.Services.AddScoped<IQuestionsService,QuestionsService>();
+builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));

@@ -7,18 +7,20 @@ namespace MyExamsBackend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UsersController : Controller
+    public class QuestionsController : Controller
     {
-        private IUsersService _usersService;
-        public UsersController(IUsersService usersService)
+
+        private IQuestionsService _QuestionsService;
+
+        public QuestionsController(IQuestionsService questionsService)
         {
-            _usersService = usersService;
+            _QuestionsService = questionsService;
         }
 
         [HttpGet("GetAll")]
         public IActionResult GetAll()
         {
-            var results = _usersService.GetAll();
+            var results = _QuestionsService.GetAll();
             if (!results.Any())
             {
                 return NotFound();
@@ -29,7 +31,7 @@ namespace MyExamsBackend.Controllers
         [HttpGet("GetById")]
         public IActionResult GetById(int id)
         {
-            var results = _usersService.GetById(id);
+            var results = _QuestionsService.GetById(id);
             if (results == null)
             {
                 return NotFound();
@@ -38,9 +40,9 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpPost("Create")]
-        public IActionResult Create(User user)
+        public IActionResult Create(Question question)
         {
-            var results = _usersService.Create(user);
+            var results = _QuestionsService.Create(question);
             if (results == false)
             {
                 return BadRequest();
@@ -49,9 +51,9 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpPut("Update")]
-        public IActionResult Update(User user)
+        public IActionResult Update(Question question)
         {
-            var results = _usersService.Update(user);
+            var results = _QuestionsService.Update(question);
             if (results == false)
             {
                 return BadRequest();
@@ -62,8 +64,8 @@ namespace MyExamsBackend.Controllers
         [HttpDelete("Delete")]
         public IActionResult Delete(int id)
         {
-            var results = _usersService.Delete(id);
-            if ( results == false)
+            var results = _QuestionsService.Delete(id);
+            if (results == false)
             {
                 return BadRequest();
             }
