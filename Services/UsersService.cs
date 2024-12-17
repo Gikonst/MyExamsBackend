@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyExamsBackend.Domain;
+using MyExamsBackend.DTOs.CertificateDTOs;
+using MyExamsBackend.DTOs.UserDTOs;
 using MyExamsBackend.Models;
 using MyExamsBackend.Services.Interfaces;
 
@@ -41,18 +43,69 @@ namespace MyExamsBackend.Services
             return dbResults;
         }
 
-        public User GetById(int id)
+        public UserResponseDTO GetById(int id)
         {
-            var dbResult = _context.Users.Where(x => x.Id == id).FirstOrDefault();
+            var dbResult = _context.Users
+                .Where(x => x.Id == id)
+                .Include(c => c.Certificates)
+                .FirstOrDefault();
 
-            return dbResult;
+            if (dbResult == null)
+            {
+                return null;
+            }
+
+            var userResponse = new UserResponseDTO
+            {
+                FirstName = dbResult.FirstName,
+                LastName = dbResult.LastName,
+                EnrolledExams = dbResult.Certificates
+                .Where(c => c.IssuedDate == null)
+                .Select(cert => new CertificateResponseDTO
+                {
+                    Id = cert.Id,
+                    ExamId = cert.ExamId,
+                    UserId = cert.UserId,
+                    Exam = cert.Exam,
+                    Status = cert.Status,
+                    EnrollmentDate = cert.EnrollmentDate,
+                    IssuedDate = cert.IssuedDate
+                }).ToList(),
+
+                PassedCertificates = dbResult.Certificates
+                .Where(c => c.IssuedDate != null)
+                .Select(cert => new CertificateResponseDTO
+                {
+                    Id = cert.Id,
+                    ExamId = cert.ExamId,
+                    UserId = cert.UserId,
+                    Exam = cert.Exam,
+                    Status = cert.Status,
+                    EnrollmentDate = cert.EnrollmentDate,
+                    IssuedDate = cert.IssuedDate
+
+                }).ToList()
+
+            };
+            return userResponse;
         }
 
-        public bool Update(User user)
+        public bool Update(UpdateUserRequestDTO updateUser)
         {
-            var dbObject = _context.Users.AsNoTracking().Where(x => x.Id == user.Id).FirstOrDefault();
+            var dbObject = _context.Users.AsNoTracking().Where(x => x.Id == updateUser.Id).FirstOrDefault();
             if (dbObject != null)
             {
+                var user = new User
+                {
+                    Id = dbObject.Id,
+                    FirstName = updateUser.FirstName,
+                    LastName = updateUser.LastName,
+                    Email = dbObject.Email,
+                    Password = dbObject.Password,
+                    Role = dbObject.Role,
+                    Exams = dbObject.Exams,
+                    Certificates = dbObject.Certificates
+                };
                 _context.Users.Update(user);
                 var SaveResults = _context.SaveChanges();
                 return SaveResults > 0;

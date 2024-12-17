@@ -29,10 +29,10 @@ namespace MyExamsBackend.Controllers
             return Ok(results);
         }
 
-        [HttpGet("GetById")]
-        public IActionResult GetById(int id)
+        [HttpGet("GetByUserId")]
+        public IActionResult GetByUserId(int id)
         {
-            var results = _certificatesService.GetById(id);
+            var results = _certificatesService.GetByUserId(id);
             if(results == null)
             {
                 return NotFound("Could not find the certificate requested");
@@ -40,10 +40,10 @@ namespace MyExamsBackend.Controllers
             return Ok(results);
         }
 
-        [HttpPost("Create")]
-        public IActionResult Create(CreateCertificateRequestDTO createCertificateRequestDto)
+        [HttpPost("Enroll")]
+        public IActionResult Enroll(CertificateRequestDTO createCertificateRequestDto)
         {
-            var results = _certificatesService.Create(createCertificateRequestDto);
+            var results = _certificatesService.Enroll(createCertificateRequestDto);
             if(results == false)
             {
                 return BadRequest("Invalid certificate");
@@ -51,10 +51,21 @@ namespace MyExamsBackend.Controllers
             return Ok("New certificate created");
         }
 
-        [HttpPut("Update")]
-        public IActionResult Update(UpdateCertificateRequestDTO updateCertificateRequestDto)
+        [HttpPost("FinalizeCertificate")]
+        public IActionResult FinalizeCertificate(CertificateRequestDTO createCertificateRequestDto)
         {
-            var result = _certificatesService.Update(updateCertificateRequestDto);
+            var results = _certificatesService.FinalizeCertificate(createCertificateRequestDto);
+            if (results == false)
+            {
+                return BadRequest("Invalid certificate");
+            }
+            return Ok("New certificate created");
+        }
+
+        [HttpPut("Update")]
+        public IActionResult Update(CertificateRequestDTO certificateRequestDTO)
+        {
+            var result = _certificatesService.Update(certificateRequestDTO);
             if(result == false)
             {
                 return BadRequest("Invalid Certificate");

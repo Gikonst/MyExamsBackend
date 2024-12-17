@@ -6,9 +6,10 @@ namespace MyExamsBackend.Services.Interfaces
     public interface ICertificatesService
     {
         public List<CertificateResponseDTO> GetAll();
-        public CertificateResponseDTO GetById(int id);
-        public bool Create(CreateCertificateRequestDTO createCertificateRequestDto);
-        public bool Update(UpdateCertificateRequestDTO updateCertificateRequestDto);
+        public List<CertificateResponseDTO> GetByUserId(int id);
+        public bool Enroll(CertificateRequestDTO createCertificateRequestDto);
+        public bool FinalizeCertificate(CertificateRequestDTO createCertificateRequestDto);
+        public bool Update(CertificateRequestDTO certificateRequestDTO);
         public bool Delete(int id);
     }
 }

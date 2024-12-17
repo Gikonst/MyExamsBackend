@@ -18,13 +18,40 @@ namespace MyExamsBackend.Services
             _mapper = mapper;
         }
         
-        public bool Create(CreateCertificateRequestDTO createCertificateRequestDto)
+        //Creating an enrollment certificate
+        public bool Enroll(CertificateRequestDTO createCertificateRequestDto)
         {
+            createCertificateRequestDto = new CertificateRequestDTO()
+            {
+                ExamId = createCertificateRequestDto.ExamId,
+                UserId = createCertificateRequestDto.UserId,
+                Score = createCertificateRequestDto.Score,
+                Status = 0,
+                EnrollmentDate = createCertificateRequestDto.EnrollmentDate,
+                IssuedDate = null
+            };
             var mappedObject = _mapper.Map<Certificate>(createCertificateRequestDto);
             _context.Certificates.Add(mappedObject);
             var changed = _context.SaveChanges();
 
             return changed > 0;
+        }
+
+        public bool FinalizeCertificate(CertificateRequestDTO certificateRequestDTO)
+        {
+            var dbObject = _context.Certificates.AsNoTracking().Where(x => x.Id == certificateRequestDTO.Id).FirstOrDefault();
+
+            if (dbObject != null)
+            {
+                dbObject.Score = certificateRequestDTO.Score;
+                dbObject.IssuedDate = certificateRequestDTO.IssuedDate.Value;
+
+                _context.Certificates.Update(dbObject);
+                var saveResults = _context.SaveChanges();
+
+                return saveResults > 0;
+            }
+            return false;
         }
 
         public bool Delete(int id)
@@ -49,22 +76,25 @@ namespace MyExamsBackend.Services
             return mappedResults;
         }
 
-        public CertificateResponseDTO GetById(int id)
+        // Get Certificate by userID exam obj included
+        public List<CertificateResponseDTO> GetByUserId(int id)
         {
-            var dbResult = _context.Certificates.Where(x => x.Id == id).FirstOrDefault();
-            var mappedResults = _mapper.Map<CertificateResponseDTO>(dbResult);
+            var dbResult = _context.Certificates.Where(x => x.UserId == id).Include(c => c.Exam).ToList();
+            var mappedResults = _mapper.Map<List<CertificateResponseDTO>>(dbResult);
 
             return mappedResults;
         }
 
-        public bool Update(UpdateCertificateRequestDTO updateCertificateRequestDto)
+    
+        public bool Update(CertificateRequestDTO certificateRequestDto)
         {
-            var dbObject = _context.Certificates.AsNoTracking().Where(x => x.Id == updateCertificateRequestDto.Id).FirstOrDefault();
+            var dbObject = _context.Certificates.AsNoTracking().Where(x => x.Id == certificateRequestDto.Id).FirstOrDefault();
 
             if (dbObject != null)
             {
-                var mappedResults = _mapper.Map<Certificate>(updateCertificateRequestDto);
-                _context.Certificates.Update(mappedResults);
+                var mappedObject = _mapper.Map<Certificate>(certificateRequestDto);
+
+                _context.Certificates.Update(mappedObject);
                 var saveResults = _context.SaveChanges();
 
                 return saveResults > 0;

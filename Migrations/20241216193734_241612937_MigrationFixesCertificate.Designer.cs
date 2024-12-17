@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyExamsBackend.Domain;
 
@@ -11,9 +12,11 @@ using MyExamsBackend.Domain;
 namespace MyExamsBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241216193734_241612937_MigrationFixesCertificate")]
+    partial class _241612937_MigrationFixesCertificate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,13 +88,13 @@ namespace MyExamsBackend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("EnrollmentDate")
+                    b.Property<DateTime?>("EnrollmentDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("ExamId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("IssuedDate")
+                    b.Property<DateTime>("IssuedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("Score")

@@ -6,10 +6,12 @@ namespace MyExamsBackend.DTOs.CertificateDTOs
     {
         public int Id { get; set; }
         public int ExamId { get; set; }
+        public Exam Exam { get; set; }
         public int UserId { get; set; }
-        // public int UserDto UserDto {get; set}
+        public int Score { get; set; }
         public ExamStatusEnum? Status { get; set; }
         public DateTime? IssuedDate { get; set; }
+        public DateTime EnrollmentDate { get; set;}
     }
 
 }

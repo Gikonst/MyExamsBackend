@@ -2,13 +2,15 @@
 
 namespace MyExamsBackend.DTOs.CertificateDTOs
 {
-    public class CreateCertificateRequestDTO
+    public class CertificateRequestDTO
     { 
         public int Id { get; set; }
         public int ExamId { get; set; }
         public int UserId { get; set; }
+        public int? Score { get; set; }
         public ExamStatusEnum Status { get; set; }
-        public DateTime IssuedDate { get; set; }
+        public DateTime EnrollmentDate { get; set; }
+        public DateTime? IssuedDate { get; set; }
     }
 
 }

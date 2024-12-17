@@ -9,7 +9,7 @@ namespace MyExamsBackend.Mappers.CertificateMappers
     {
         public CreateCertificateMapper()
         {
-            CreateMap<CreateCertificateRequestDTO, Certificate>();
+            CreateMap<CertificateRequestDTO, Certificate>();
         }
     }
 }

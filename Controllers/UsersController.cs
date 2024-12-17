@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MyExamsBackend.DTOs.UserDTOs;
 using MyExamsBackend.Models;
 using MyExamsBackend.Services;
 using MyExamsBackend.Services.Interfaces;
@@ -49,9 +50,9 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpPut("Update")]
-        public IActionResult Update(User user)
+        public IActionResult Update(UpdateUserRequestDTO updateUser)
         {
-            var results = _usersService.Update(user);
+            var results = _usersService.Update(updateUser);
             if (results == false)
             {
                 return BadRequest();
