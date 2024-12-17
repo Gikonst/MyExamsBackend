@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MyExamsBackend.DTOs.UserDTOs;
 using MyExamsBackend.Models;
 using MyExamsBackend.Services;
@@ -17,6 +18,7 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpGet("GetAll")]
+        [Authorize(Policy = "AdminPolicy")]
         public IActionResult GetAll()
         {
             var results = _usersService.GetAll();

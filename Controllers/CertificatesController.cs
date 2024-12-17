@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyExamsBackend.DTOs.CertificateDTOs;
 using MyExamsBackend.Models;
@@ -30,6 +31,7 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpGet("GetByUserId")]
+      
         public IActionResult GetByUserId(int id)
         {
             var results = _certificatesService.GetByUserId(id);

@@ -1,12 +1,22 @@
-﻿namespace MyExamsBackend.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MyExamsBackend.Models
 {
     public class User
     {
         public int Id { get; set; }
-        public string FirstName { get; set; } 
-        public string LastName { get; set; } 
-        public string Email { get; set; } 
-        public string Password { get; set; } 
+        [Required]
+        [MaxLength(50)]
+        public string FirstName { get; set; }
+        [Required]
+        [MaxLength(50)]
+        public string LastName { get; set; }
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+        [Required]
+        public string Password { get; set; }
+        [Required]
         public UserRoleType Role { get; set; }
         public List<Exam> Exams { get; set; }
         public List<Certificate> Certificates { get; set; }
