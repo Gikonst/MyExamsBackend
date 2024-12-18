@@ -7,6 +7,8 @@ using MyExamsBackend.Services;
 using MyExamsBackend.Services.Interfaces;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using DinkToPdf.Contracts;
+using DinkToPdf;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +42,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
 });
 
+builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 // Add services to the container.
 
 builder.Services.AddControllers();

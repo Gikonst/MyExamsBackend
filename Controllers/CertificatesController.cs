@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyExamsBackend.DTOs.CertificateDTOs;
 using MyExamsBackend.Models;
+using MyExamsBackend.Services;
 using MyExamsBackend.Services.Interfaces;
 
 namespace MyExamsBackend.Controllers
@@ -84,6 +85,23 @@ namespace MyExamsBackend.Controllers
                 return BadRequest("Could not find the certificate requested");
             }
             return Ok("Certificate deleted");
+        }
+
+        [HttpGet("{id}/download")]
+        public IActionResult DownloadCertificate(int id)
+        {
+            try
+            {
+                // Generate the certificate PDF
+                byte[] pdfBytes = _certificatesService.GenerateCertificate(id);
+
+               
+                return File(pdfBytes, "application/pdf", "Certificate.pdf");
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }

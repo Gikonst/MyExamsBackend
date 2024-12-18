@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate of Achievement</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f3f3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .certificate-container {
+            background: #ffffff;
+            border: 10px solid #4a90e2;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 900px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+            .certificate-container::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                border: 5px solid #d4af37;
+                pointer-events: none;
+            }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #4a90e2;
+            margin: 0;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #555;
+            margin: 10px 0 20px;
+        }
+
+        .recipient-name {
+            font-size: 2rem;
+            color: #222;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .details {
+            font-size: 1.1rem;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .certificate-footer {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+            .certificate-footer div {
+                text-align: center;
+            }
+
+            .certificate-footer .signature {
+                font-style: italic;
+                color: #4a90e2;
+                font-size: 1rem;
+                border-top: 1px solid #333;
+                margin-top: 10px;
+            }
+
+        .logo {
+            width: 80px;
+            margin: 0 auto 20px;
+        }
+
+        @media (max-width: 768px) {
+            .certificate-container {
+                padding: 20px;
+                font-size: 90%;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .recipient-name {
+                font-size: 1.5rem;
+            }
+
+            .details {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="certificate-container">
+        <img src="https://example.com/logo.png" alt="Company Logo" class="logo" />
+        <h1>Certificate of Achievement</h1>
+        <p class="subtitle">This is proudly presented to</p>
+        <p class="recipient-name">{{Name}}</p>
+        <p class="details">For successfully completing the exam</p>
+        <p class="details"><strong>{{ExamName}}</strong></p>
+        <p class="details">Issued on {{IssuedDate}}</p>
+
+        <div class="certificate-footer">
+            <div>
+                <span class="signature">Authorized Signatory</span>
+                <p>Makis Dimakis - Course Director</p>
+            </div>
+            <div>
+                <span class="signature">Seal</span>
+                <p>Certiland</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
