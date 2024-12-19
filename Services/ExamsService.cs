@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MyExamsBackend.Domain;
 using MyExamsBackend.DTOs.ExamDTOs;
+using MyExamsBackend.DTOs.TestDTOs;
 using MyExamsBackend.Models;
 using MyExamsBackend.Services.Interfaces;
 
@@ -17,6 +18,36 @@ namespace MyExamsBackend.Services
             _context = context;
             _mapper = mapper;   
         }
+
+        public (double Score, bool Passed) CalculateScore(int examId, List<TestUserAnswersDTO> userAnswers)
+        {
+            var questions = _context.Questions
+           .Include(q => q.Answers)
+           .Where(q => q.Exams.Any(e => e.Id == examId))
+           .ToList();
+
+            int totalQuestions = questions.Count;
+            int correctAnswersCount = 0;
+
+            foreach (var userAnswer in userAnswers)
+            {
+                var question = questions.FirstOrDefault(q => q.Id == userAnswer.QuestionId);
+                if (question != null)
+                {
+                    var selectedAnswer = question.Answers.FirstOrDefault(a => a.Id == userAnswer.SelectedAnswerId);
+                    if (selectedAnswer != null && selectedAnswer.IsCorrect)
+                    {
+                        correctAnswersCount++;
+                    }
+                }
+            }
+            double score = ((double)correctAnswersCount / totalQuestions) * 100;
+
+            bool passed = score > 50 ;
+
+            return (score, passed);
+        }
+
         public bool Create(CreateExamRequestDTO createExamRequestDto)
         {
             var mappedObject = _mapper.Map<Exam>(createExamRequestDto);

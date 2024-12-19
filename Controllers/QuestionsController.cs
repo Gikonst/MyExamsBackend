@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MyExamsBackend.DTOs.QuestionDTOs;
 using MyExamsBackend.Models;
 using MyExamsBackend.Services;
 using MyExamsBackend.Services.Interfaces;
@@ -40,9 +41,9 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpPost("Create")]
-        public IActionResult Create(Question question)
+        public IActionResult Create(QuestionRequestDTO newQuestion)
         {
-            var results = _QuestionsService.Create(question);
+            var results = _QuestionsService.Create(newQuestion);
             if (results == false)
             {
                 return BadRequest();

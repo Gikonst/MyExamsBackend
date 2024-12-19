@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyExamsBackend.Domain;
+using MyExamsBackend.DTOs.QuestionDTOs;
 using MyExamsBackend.Models;
 using MyExamsBackend.Services.Interfaces;
 
@@ -13,8 +14,14 @@ namespace MyExamsBackend.Services
             _context = context;
         }
 
-        public bool Create(Question question)
+        public bool Create(QuestionRequestDTO newQuestion)
         {
+            var question = new Question
+            {
+                QuestionText = newQuestion.QuestionText,
+                Answers = new List<Answer>(),
+                Exams = new List<Exam>()
+            };
             _context.Questions.Add(question);
             var changed = _context.SaveChanges();
 
@@ -37,7 +44,7 @@ namespace MyExamsBackend.Services
 
         public List<Question> GetAll()
         {
-            var dbResults = _context.Questions.ToList();
+            var dbResults = _context.Questions.Include(q => q.Answers).ToList();
 
             return dbResults;
         }

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyExamsBackend.DTOs.ExamDTOs;
+using MyExamsBackend.DTOs.TestDTOs;
 using MyExamsBackend.Models;
+using MyExamsBackend.Services;
 using MyExamsBackend.Services.Interfaces;
 
 namespace MyExamsBackend.Controllers
@@ -71,6 +73,24 @@ namespace MyExamsBackend.Controllers
                 return BadRequest("Could not find the exam requested");
             }
             return Ok("Exam deleted");
+        }
+
+        [HttpPost("submit/{examId}")]
+        public IActionResult SubmitAnswers(int examId, [FromBody] List<TestUserAnswersDTO> userAnswers)
+        {
+            if (userAnswers == null || !userAnswers.Any())
+            {
+                return BadRequest("No answers provided.");
+            }
+
+            // Call the service method to calculate score and pass status
+            var (score, passed) = _examsService.CalculateScore(examId, userAnswers);
+
+            return Ok(new
+            {
+                Score = score,
+                Passed = passed,
+            });
         }
     }
 }

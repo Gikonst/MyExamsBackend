@@ -9,6 +9,7 @@
         public Question()
         {
             Answers = new List<Answer>();   
+            Exams = new List<Exam>();
         }
     }
 }
