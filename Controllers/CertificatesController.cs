@@ -65,6 +65,17 @@ namespace MyExamsBackend.Controllers
             return Ok("New certificate created");
         }
 
+        [HttpPost("Create")]
+        public IActionResult Create(CertificateRequestDTO createCertificateRequestDto)
+        {
+            var results = _certificatesService.Create(createCertificateRequestDto);
+            if (results == false)
+            {
+                return BadRequest("Invalid certificate");
+            }
+            return Ok("New certificate created");
+        }
+
         [HttpPut("Update")]
         public IActionResult Update(CertificateRequestDTO certificateRequestDTO)
         {

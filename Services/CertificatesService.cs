@@ -48,6 +48,7 @@ namespace MyExamsBackend.Services
             if (dbObject != null)
             {
                 dbObject.Score = certificateRequestDTO.Score;
+                dbObject.Status = (ExamStatusEnum)1;
                 dbObject.IssuedDate = certificateRequestDTO.IssuedDate.Value;
 
                 _context.Certificates.Update(dbObject);

@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MyExamsBackend.Domain;
+using MyExamsBackend.DTOs.AnswerDTOs;
 using MyExamsBackend.DTOs.ExamDTOs;
+using MyExamsBackend.DTOs.QuestionDTOs;
 using MyExamsBackend.DTOs.TestDTOs;
 using MyExamsBackend.Models;
 using MyExamsBackend.Services.Interfaces;
@@ -73,16 +75,57 @@ namespace MyExamsBackend.Services
 
         public List<ExamResponseDTO> GetAll()
         {
-            var dbResults = _context.Exams.Include(e => e.Questions).ToList();
-            var mappedResults = _mapper.Map<List<ExamResponseDTO>>(dbResults);
-            return mappedResults;
+            var dbResults = _context.Exams
+                .Include(e => e.Questions)
+                .ThenInclude(q => q.Answers)
+                .Select(e => new ExamResponseDTO
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    ProgrammingLanguageId = e.ProgrammingLanguageId,
+                    Questions = e.Questions.Select(q => new QuestionResponseDTO
+                    {
+                        Id = q.Id,
+                        QuestionText = q.QuestionText,
+                        Answers = q.Answers.Select(a => new AnswerResponseDTO
+                        {
+                            Id = a.Id,
+                            AnswerText = a.AnswerText,
+                            IsCorrect = a.IsCorrect,
+                        }).ToList()
+                    }).ToList()
+                })
+                .ToList();
+
+            return dbResults;
         }
 
         public ExamResponseDTO GetById(int id)
         {
-            var dbResult = _context.Exams.Where(x => x.Id == id).Include(e => e.ProgrammingLanguage).Include(e => e.Questions).FirstOrDefault();
-            var mappedResult = _mapper.Map<ExamResponseDTO>(dbResult);
-            return mappedResult;
+            var dbResult = _context.Exams
+                .Where(x => x.Id == id)
+                .Include(e => e.Questions)
+                .ThenInclude(q => q.Answers)
+                .Select(e => new ExamResponseDTO
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    ProgrammingLanguageId = e.ProgrammingLanguageId,
+                    Questions = e.Questions.Select(q => new QuestionResponseDTO
+                    {
+                        Id = q.Id,
+                        QuestionText = q.QuestionText,
+                        Answers = q.Answers.Select(a => new AnswerResponseDTO
+                        {
+                            Id = a.Id,
+                            AnswerText = a.AnswerText,
+                            IsCorrect = a.IsCorrect,
+                        }).ToList()
+                    }).ToList()
+                })
+                .FirstOrDefault();
+
+            return dbResult;
         }
 
         public bool Update(UpdateExamRequestDTO updateExamRequestDto) 

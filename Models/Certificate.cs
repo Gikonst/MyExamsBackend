@@ -16,9 +16,7 @@
     public enum ExamStatusEnum : ushort
     {
         Enrolled = 0,
-        Failed = 1,
-        BorderlineFailed = 2,
-        Passed = 3,
-        Excellent = 4
+        Passed = 1,
+        Failed = 2,
     }
 }
