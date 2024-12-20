@@ -42,7 +42,7 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpPost("Create")]
-        public IActionResult Create(CreateAnswerRequestDTO createAnswerRequestDto)
+        public IActionResult Create(AnswerRequestDTO createAnswerRequestDto)
         {
             var results = _answersService.Create(createAnswerRequestDto);
             if(results == false)
@@ -53,7 +53,7 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpPut("Update")]
-        public IActionResult Update(UpdateAnswerRequestDTO updateAnswerRequestDto)
+        public IActionResult Update(AnswerRequestDTO updateAnswerRequestDto)
         {
             var results = _answersService.Update(updateAnswerRequestDto);
             if(results == false)

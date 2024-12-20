@@ -7,8 +7,8 @@ namespace MyExamsBackend.Services.Interfaces
     {
         public List<AnswerResponseDTO> GetAll();
         public AnswerResponseDTO GetById(int id);
-        public bool Create(CreateAnswerRequestDTO createAnswerRequestDto);
-        public bool Update(UpdateAnswerRequestDTO updateAnswerRequestDto);
+        public bool Create(AnswerRequestDTO createAnswerRequestDto);
+        public bool Update(AnswerRequestDTO updateAnswerRequestDto);
         public bool Delete(int id);
 
     }

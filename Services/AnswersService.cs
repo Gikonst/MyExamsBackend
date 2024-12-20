@@ -18,7 +18,7 @@ namespace MyExamsBackend.Services
             _mapper = mapper;
         }
 
-        public bool Create(CreateAnswerRequestDTO createAnswerRequestDto)
+        public bool Create(AnswerRequestDTO createAnswerRequestDto)
         {
 
             var mappedObject = _mapper.Map<Answer>(createAnswerRequestDto);
@@ -56,7 +56,7 @@ namespace MyExamsBackend.Services
             return mappedResult;
         }
 
-        public bool Update(UpdateAnswerRequestDTO updateAnswerRequestDto)
+        public bool Update(AnswerRequestDTO updateAnswerRequestDto)
         {
             var dbObject = _context.Answers.AsNoTracking().Where(x => x.Id == updateAnswerRequestDto.Id).FirstOrDefault();
 
