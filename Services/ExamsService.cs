@@ -43,7 +43,7 @@ namespace MyExamsBackend.Services
             }
             double score = ((double)correctAnswersCount / totalQuestions) * 100;
 
-            bool passed = score > 50 ;
+            bool passed = score >= 50 ;
 
             return (score, passed);
         }
@@ -73,7 +73,7 @@ namespace MyExamsBackend.Services
 
         public List<ExamResponseDTO> GetAll()
         {
-            var dbResults = _context.Exams.Include(e => e.ProgrammingLanguage).Include(e => e.Questions).ToList();
+            var dbResults = _context.Exams.Include(e => e.Questions).ToList();
             var mappedResults = _mapper.Map<List<ExamResponseDTO>>(dbResults);
             return mappedResults;
         }

@@ -41,7 +41,7 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpPost("Create")]
-        public IActionResult Create(CreateProgrammingLanguageRequestDTO createProgrammingLanguageRequestDto)
+        public IActionResult Create(ProgrammingLanguageRequestDTO createProgrammingLanguageRequestDto)
         {
             var results = _programmingLanguagesService.Create(createProgrammingLanguageRequestDto);
             if (results == false)
@@ -52,9 +52,9 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpPut("Update")]
-        public IActionResult Update(UpdateProgrammingLanguageRequestDTO updateProgrammingLanguageRequestDto)
+        public IActionResult Update(ProgrammingLanguageRequestDTO programmingLanguageRequestDto)
         {
-            var results = _programmingLanguagesService.Update(updateProgrammingLanguageRequestDto);
+            var results = _programmingLanguagesService.Update(programmingLanguageRequestDto);
             if (results == false)
             {
                 return BadRequest("Invalid programming language");

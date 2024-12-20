@@ -8,6 +8,7 @@ namespace MyExamsBackend.Services.Interfaces
         public List<CertificateResponseDTO> GetAll();
         public List<CertificateResponseDTO> GetByUserId(int id);
         public byte[] GenerateCertificate(int certificateId);
+        public bool Create(CertificateRequestDTO createCertificateRequestDto);
         public bool Enroll(CertificateRequestDTO createCertificateRequestDto);
         public bool FinalizeCertificate(CertificateRequestDTO createCertificateRequestDto);
         public bool Update(CertificateRequestDTO certificateRequestDTO);

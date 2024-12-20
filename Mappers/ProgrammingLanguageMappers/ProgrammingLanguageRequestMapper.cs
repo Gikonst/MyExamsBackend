@@ -4,11 +4,11 @@ using MyExamsBackend.Models;
 
 namespace MyExamsBackend.Mappers.ProgrammingLanguageMappers
 {
-    public class UpdateProgrammingLanguageMapper : Profile
+    public class ProgrammingLanguageRequestMapper : Profile
     {
-        public UpdateProgrammingLanguageMapper()
+        public ProgrammingLanguageRequestMapper()
         {
-            CreateMap<UpdateProgrammingLanguageRequestDTO, ProgrammingLanguage>();
+            CreateMap<ProgrammingLanguageRequestDTO, ProgrammingLanguage>();
         }
     }
 }

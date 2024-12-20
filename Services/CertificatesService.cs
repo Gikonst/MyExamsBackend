@@ -21,7 +21,7 @@ namespace MyExamsBackend.Services
             _mapper = mapper;
             _converter = converter;
         }
-        
+
         //Creating an enrollment certificate
         public bool Enroll(CertificateRequestDTO createCertificateRequestDto)
         {
@@ -66,7 +66,7 @@ namespace MyExamsBackend.Services
             {
                 _context.Certificates.Remove(dbResult);
                 var deleteResult = _context.SaveChanges();
-                
+
                 return deleteResult > 0;
             }
             return false;
@@ -89,7 +89,7 @@ namespace MyExamsBackend.Services
             return mappedResults;
         }
 
-    
+
         public bool Update(CertificateRequestDTO certificateRequestDto)
         {
             var dbObject = _context.Certificates.AsNoTracking().Where(x => x.Id == certificateRequestDto.Id).FirstOrDefault();
@@ -139,5 +139,15 @@ namespace MyExamsBackend.Services
 
             return _converter.Convert(pdfDocument);
         }
+
+        public bool Create(CertificateRequestDTO createCertificateRequestDto)
+        {
+            var mappedObject = _mapper.Map<Certificate>(createCertificateRequestDto);
+            _context.Certificates.Add(mappedObject);
+            var changed = _context.SaveChanges();
+
+            return changed > 0;
+        }
     }
 }
+

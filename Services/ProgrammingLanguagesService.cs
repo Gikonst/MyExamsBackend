@@ -17,7 +17,7 @@ namespace MyExamsBackend.Services
             _mapper = mapper;
         }
 
-        public bool Create(CreateProgrammingLanguageRequestDTO createProgrammingLanguageRequestDto)
+        public bool Create(ProgrammingLanguageRequestDTO createProgrammingLanguageRequestDto)
         {
             var mappedObject = _mapper.Map<ProgrammingLanguage>(createProgrammingLanguageRequestDto);
             _context.ProgrammingLanguages.Add(mappedObject);
@@ -56,12 +56,12 @@ namespace MyExamsBackend.Services
             return mappedResult;
         }
 
-        public bool Update(UpdateProgrammingLanguageRequestDTO updateProgrammingLanguageRequestDto)
+        public bool Update(ProgrammingLanguageRequestDTO ProgrammingLanguageRequestDto)
         {
-            var dbObject = _context.ProgrammingLanguages.AsNoTracking().Where(x => x.Id == updateProgrammingLanguageRequestDto.Id).FirstOrDefault();
+            var dbObject = _context.ProgrammingLanguages.AsNoTracking().Where(x => x.Id == ProgrammingLanguageRequestDto.Id).FirstOrDefault();
             if (dbObject != null)
             { 
-                var mappedObject = _mapper.Map<ProgrammingLanguage>(updateProgrammingLanguageRequestDto);
+                var mappedObject = _mapper.Map<ProgrammingLanguage>(ProgrammingLanguageRequestDto);
                 _context.ProgrammingLanguages.Update(mappedObject);
                 var SaveResults = _context.SaveChanges();
                 return SaveResults > 0;

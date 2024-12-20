@@ -7,8 +7,8 @@ namespace MyExamsBackend.Services.Interfaces
     {
         public List<ProgrammingLanguageDTO> GetAll();
         public ProgrammingLanguageDTO GetById(int id);
-        public bool Create(CreateProgrammingLanguageRequestDTO createProgrammingLanguageRequestDto);
-        public bool Update(UpdateProgrammingLanguageRequestDTO updateProgrammingLanguageRequestDto);
+        public bool Create(ProgrammingLanguageRequestDTO createProgrammingLanguageRequestDto);
+        public bool Update(ProgrammingLanguageRequestDTO ProgrammingLanguageRequestDto);
         public bool Delete(int id);
     }
 }
