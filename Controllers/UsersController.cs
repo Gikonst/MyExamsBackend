@@ -40,17 +40,6 @@ namespace MyExamsBackend.Controllers
             return Ok(results);
         }
 
-        [HttpPost("Create")]
-        public IActionResult Create(User user)
-        {
-            var results = _usersService.Create(user);
-            if (results == false)
-            {
-                return BadRequest();
-            }
-            return Ok();
-        }
-
         [HttpPut("Update")]
         public IActionResult Update(UpdateUserRequestDTO updateUser)
         {

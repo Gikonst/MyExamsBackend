@@ -65,10 +65,10 @@ namespace MyExamsBackend.Controllers
             return Ok("New certificate created");
         }
 
-        [HttpPost("Create")]
-        public IActionResult Create(CertificateRequestDTO createCertificateRequestDto)
+        [HttpPost("Create/{examId}/{userId}")]
+        public IActionResult Create(CertificateRequestDTO createCertificateRequestDto, int examId, int userId)
         {
-            var results = _certificatesService.Create(createCertificateRequestDto);
+            var results = _certificatesService.Create(createCertificateRequestDto, examId, userId);
             if (results == false)
             {
                 return BadRequest("You have already passed this exam");

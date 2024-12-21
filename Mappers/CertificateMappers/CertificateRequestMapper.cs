@@ -29,16 +29,16 @@ namespace MyExamsBackend.Mappers.CertificateMappers
             return certificate;
         }
 
-        public static Certificate MapForCreation(CertificateRequestDTO dto)
+        public static Certificate MapForCreation(CertificateRequestDTO dto, int examId, int userId)
         {
             return new Certificate
             {
-                ExamId = dto.ExamId,
-                UserId = dto.UserId,
+                ExamId = examId,
+                UserId = userId,
                 Score = dto.Score,
                 Status = ExamStatusEnum.Passed,
                 EnrollmentDate = DateTime.Now,
-                IssuedDate = dto.IssuedDate ?? DateTime.Now
+                IssuedDate = DateTime.Now
             };
         }
 

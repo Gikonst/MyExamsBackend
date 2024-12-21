@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyExamsBackend.Domain;
 using MyExamsBackend.DTOs.CertificateDTOs;
+using MyExamsBackend.DTOs.ExamDTOs;
 using MyExamsBackend.DTOs.UserDTOs;
 using MyExamsBackend.Models;
 using MyExamsBackend.Services.Interfaces;
@@ -13,13 +14,6 @@ namespace MyExamsBackend.Services
         public UsersService(ApplicationDbContext context)
         {
             _context = context;
-        }
-        public bool Create(User user)
-        {
-            _context.Users.Add(user);
-            var changed = _context.SaveChanges();
-
-            return changed > 0;
         }
 
         public bool Delete(int id)
@@ -48,6 +42,7 @@ namespace MyExamsBackend.Services
             var dbResult = _context.Users
                 .Where(x => x.Id == id)
                 .Include(c => c.Certificates)
+                .ThenInclude(c => c.Exam)
                 .FirstOrDefault();
 
             if (dbResult == null)
@@ -61,12 +56,16 @@ namespace MyExamsBackend.Services
                 LastName = dbResult.LastName,
                 EnrolledExams = dbResult.Certificates
                 .Where(c => c.IssuedDate == null)
-                .Select(cert => new CertificateResponseDTO
+                .Select(cert => new CertificateResponseUserDTO
                 {
                     Id = cert.Id,
                     ExamId = cert.ExamId,
                     UserId = cert.UserId,
-                    Exam = cert.Exam,
+                    Exam = cert.Exam == null ? null : new ExamResponseCertificateDTO
+                    {
+                        Name = cert.Exam.Name,
+                        ImageSrc = cert.Exam.Name
+                    },
                     Status = cert.Status,
                     EnrollmentDate = cert.EnrollmentDate,
                     IssuedDate = cert.IssuedDate
@@ -74,17 +73,22 @@ namespace MyExamsBackend.Services
 
                 PassedCertificates = dbResult.Certificates
                 .Where(c => c.IssuedDate != null)
-                .Select(cert => new CertificateResponseDTO
+                .Select(cert => new CertificateResponseUserDTO
                 {
                     Id = cert.Id,
                     ExamId = cert.ExamId,
                     UserId = cert.UserId,
-                    Exam = cert.Exam,
+                    Exam = cert.Exam == null ? null : new ExamResponseCertificateDTO
+                    {
+                        Name = cert.Exam.Name,
+                        ImageSrc = cert.Exam.Name
+                    },
                     Status = cert.Status,
                     EnrollmentDate = cert.EnrollmentDate,
                     IssuedDate = cert.IssuedDate
 
-                }).ToList()
+                }).
+                ToList()
 
             };
             return userResponse;

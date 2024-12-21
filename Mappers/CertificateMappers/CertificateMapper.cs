@@ -9,6 +9,7 @@ namespace MyExamsBackend.Mappers.CertificateMappers
         public CertificateMapper()
         {
             CreateMap<Certificate, CertificateResponseDTO>();
+
         }
     }
 }

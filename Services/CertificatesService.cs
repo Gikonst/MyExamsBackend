@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using MyExamsBackend.Domain;
 using MyExamsBackend.DTOs.AnswerDTOs;
 using MyExamsBackend.DTOs.CertificateDTOs;
+using MyExamsBackend.DTOs.ExamDTOs;
 using MyExamsBackend.Mappers.CertificateMappers;
 using MyExamsBackend.Models;
 using MyExamsBackend.Services.Interfaces;
@@ -82,7 +83,10 @@ namespace MyExamsBackend.Services
         // Get Certificate by userID exam obj included
         public List<CertificateResponseDTO> GetByUserId(int id)
         {
-            var dbResult = _context.Certificates.Where(x => x.UserId == id).Include(c => c.Exam).ToList();
+            var dbResult = _context.Certificates.Where(x => x.UserId == id)
+                .Include(c => c.Exam)
+                .ThenInclude(e => e.ProgrammingLanguage)
+                .ToList();
             var mappedResults = _mapper.Map<List<CertificateResponseDTO>>(dbResult);
 
             return mappedResults;
@@ -123,17 +127,17 @@ namespace MyExamsBackend.Services
             return _converter.Convert(pdfDocument);
         }
 
-        public bool Create(CertificateRequestDTO createCertificateRequestDto)
+        public bool Create(CertificateRequestDTO createCertificateRequestDto, int examId, int userId)
         {
             bool certificateExists = _context.Certificates
-                .Any(c => c.UserId == createCertificateRequestDto.UserId && c.ExamId == createCertificateRequestDto.ExamId);
+                .Any(c => c.UserId == userId && c.ExamId == examId);
 
             if (certificateExists)
             {
                 return false;
             }
 
-            var mappedObject = CertificateRequestMapper.MapForCreation(createCertificateRequestDto);
+            var mappedObject = CertificateRequestMapper.MapForCreation(createCertificateRequestDto, examId, userId);
             _context.Certificates.Add(mappedObject);
             var changed = _context.SaveChanges();
 
