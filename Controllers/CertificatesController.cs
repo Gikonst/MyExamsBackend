@@ -49,18 +49,18 @@ namespace MyExamsBackend.Controllers
             var results = _certificatesService.Enroll(createCertificateRequestDto);
             if(results == false)
             {
-                return BadRequest("Invalid certificate");
+                return BadRequest("You already have passed this exam");
             }
-            return Ok("New certificate created");
+            return Ok("Exam booked");
         }
 
-        [HttpPost("FinalizeCertificate")]
+        [HttpPut("FinalizeCertificate")]
         public IActionResult FinalizeCertificate(CertificateRequestDTO createCertificateRequestDto)
         {
             var results = _certificatesService.FinalizeCertificate(createCertificateRequestDto);
             if (results == false)
             {
-                return BadRequest("Invalid certificate");
+                return BadRequest("There is no certificate to be finalized");
             }
             return Ok("New certificate created");
         }
@@ -71,20 +71,9 @@ namespace MyExamsBackend.Controllers
             var results = _certificatesService.Create(createCertificateRequestDto);
             if (results == false)
             {
-                return BadRequest("Invalid certificate");
+                return BadRequest("You have already passed this exam");
             }
             return Ok("New certificate created");
-        }
-
-        [HttpPut("Update")]
-        public IActionResult Update(CertificateRequestDTO certificateRequestDTO)
-        {
-            var result = _certificatesService.Update(certificateRequestDTO);
-            if(result == false)
-            {
-                return BadRequest("Invalid Certificate");
-            }
-            return Ok("Certificate Updated");
         }
 
         [HttpDelete("Delete")]

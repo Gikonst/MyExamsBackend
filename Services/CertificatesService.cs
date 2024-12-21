@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using MyExamsBackend.Domain;
 using MyExamsBackend.DTOs.AnswerDTOs;
 using MyExamsBackend.DTOs.CertificateDTOs;
+using MyExamsBackend.Mappers.CertificateMappers;
 using MyExamsBackend.Models;
 using MyExamsBackend.Services.Interfaces;
 
@@ -25,16 +26,15 @@ namespace MyExamsBackend.Services
         //Creating an enrollment certificate
         public bool Enroll(CertificateRequestDTO createCertificateRequestDto)
         {
-            createCertificateRequestDto = new CertificateRequestDTO()
+            bool certificateExists = _context.Certificates
+                .Any(c => c.UserId == createCertificateRequestDto.UserId && c.ExamId == createCertificateRequestDto.ExamId);
+
+            if (certificateExists)
             {
-                ExamId = createCertificateRequestDto.ExamId,
-                UserId = createCertificateRequestDto.UserId,
-                Score = createCertificateRequestDto.Score,
-                Status = 0,
-                EnrollmentDate = createCertificateRequestDto.EnrollmentDate,
-                IssuedDate = null
-            };
-            var mappedObject = _mapper.Map<Certificate>(createCertificateRequestDto);
+                return false;
+            }
+            
+            var mappedObject = CertificateRequestMapper.MapForEnrollment(createCertificateRequestDto);
             _context.Certificates.Add(mappedObject);
             var changed = _context.SaveChanges();
 
@@ -43,14 +43,12 @@ namespace MyExamsBackend.Services
 
         public bool FinalizeCertificate(CertificateRequestDTO certificateRequestDTO)
         {
-            var dbObject = _context.Certificates.AsNoTracking().Where(x => x.Id == certificateRequestDTO.Id).FirstOrDefault();
+            var dbObject = _context.Certificates.AsNoTracking()                
+                .FirstOrDefault(x => x.UserId == certificateRequestDTO.UserId && x.ExamId == certificateRequestDTO.ExamId && x.IssuedDate == null);
 
             if (dbObject != null)
             {
-                dbObject.Score = certificateRequestDTO.Score;
-                dbObject.Status = (ExamStatusEnum)1;
-                dbObject.IssuedDate = certificateRequestDTO.IssuedDate.Value;
-
+                var updatedObject = CertificateRequestMapper.UpdateForFinalize(dbObject, certificateRequestDTO);
                 _context.Certificates.Update(dbObject);
                 var saveResults = _context.SaveChanges();
 
@@ -91,22 +89,6 @@ namespace MyExamsBackend.Services
         }
 
 
-        public bool Update(CertificateRequestDTO certificateRequestDto)
-        {
-            var dbObject = _context.Certificates.AsNoTracking().Where(x => x.Id == certificateRequestDto.Id).FirstOrDefault();
-
-            if (dbObject != null)
-            {
-                var mappedObject = _mapper.Map<Certificate>(certificateRequestDto);
-
-                _context.Certificates.Update(mappedObject);
-                var saveResults = _context.SaveChanges();
-
-                return saveResults > 0;
-            }
-            return false;
-        }
-
         public byte[] GenerateCertificate(int certificateId)
         {
             var certificate = _context.Certificates
@@ -143,12 +125,22 @@ namespace MyExamsBackend.Services
 
         public bool Create(CertificateRequestDTO createCertificateRequestDto)
         {
-            var mappedObject = _mapper.Map<Certificate>(createCertificateRequestDto);
+            bool certificateExists = _context.Certificates
+                .Any(c => c.UserId == createCertificateRequestDto.UserId && c.ExamId == createCertificateRequestDto.ExamId);
+
+            if (certificateExists)
+            {
+                return false;
+            }
+
+            var mappedObject = CertificateRequestMapper.MapForCreation(createCertificateRequestDto);
             _context.Certificates.Add(mappedObject);
             var changed = _context.SaveChanges();
 
             return changed > 0;
         }
+
+   
     }
 }
 

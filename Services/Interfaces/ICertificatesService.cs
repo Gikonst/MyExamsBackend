@@ -11,7 +11,6 @@ namespace MyExamsBackend.Services.Interfaces
         public bool Create(CertificateRequestDTO createCertificateRequestDto);
         public bool Enroll(CertificateRequestDTO createCertificateRequestDto);
         public bool FinalizeCertificate(CertificateRequestDTO createCertificateRequestDto);
-        public bool Update(CertificateRequestDTO certificateRequestDTO);
         public bool Delete(int id);
     }
 }
