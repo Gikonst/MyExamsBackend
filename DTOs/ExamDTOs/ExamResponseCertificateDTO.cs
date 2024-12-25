@@ -6,6 +6,7 @@ namespace MyExamsBackend.DTOs.ExamDTOs
     public class ExamResponseCertificateDTO
     {
         public string Name { get; set; }
-        public string? ImageSrc { get; set; }
+        public string ImageSrc { get; set; }
+        public string Description { get; set; }
     }
 }

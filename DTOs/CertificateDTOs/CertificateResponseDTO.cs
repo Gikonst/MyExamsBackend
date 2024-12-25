@@ -7,7 +7,7 @@ namespace MyExamsBackend.DTOs.CertificateDTOs
     {
         public int Id { get; set; }
         public int ExamId { get; set; }
-        public Exam Exam { get; set; }
+        public ExamResponseCertificateDTO Exam { get; set; }
         public int UserId { get; set; }
         public int Score { get; set; }
         public ExamStatusEnum? Status { get; set; }

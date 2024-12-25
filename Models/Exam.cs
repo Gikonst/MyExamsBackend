@@ -4,7 +4,8 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-
+        public string ImageSrc { get; set; }
+        public string Description { get; set; }
         public int ProgrammingLanguageId { get; set; }
         public ProgrammingLanguage ProgrammingLanguage { get; set; }
         public List<Certificate> Certificates { get; set; }

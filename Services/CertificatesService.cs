@@ -80,14 +80,14 @@ namespace MyExamsBackend.Services
             return mappedResults;
         }
 
-        // Get Certificate by userID exam obj included
+        // TODO Shape the exam so they are not confused!
         public List<CertificateResponseDTO> GetByUserId(int id)
         {
             var dbResult = _context.Certificates.Where(x => x.UserId == id)
                 .Include(c => c.Exam)
-                .ThenInclude(e => e.ProgrammingLanguage)
                 .ToList();
-            var mappedResults = _mapper.Map<List<CertificateResponseDTO>>(dbResult);
+
+            var mappedResults = CertificateMapper.ToResponseDTOList(dbResult);
 
             return mappedResults;
         }
