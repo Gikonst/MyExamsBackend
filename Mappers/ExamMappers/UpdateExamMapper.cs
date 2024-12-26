@@ -8,10 +8,10 @@ namespace MyExamsBackend.Mappers.ExamMappers
     {
         public static void MapForUpdate(UpdateExamRequestDTO dto, Exam exam)
         {
-            // Update fields from the DTO
-            exam.Name = dto.Name;
-            exam.ImageSrc = dto.ImageSrc;
-            exam.Description = dto.Description;
+            
+            exam.Name = string.IsNullOrEmpty(dto.Name) ? exam.Name : dto.Name;
+            exam.ImageSrc = string.IsNullOrEmpty(dto.ImageSrc) ? exam.ImageSrc : dto.ImageSrc;
+            exam.Description = string.IsNullOrEmpty(dto.Description) ? exam.Description : dto.Description;
             exam.ProgrammingLanguageId = dto.ProgrammingLanguageId;
 
 

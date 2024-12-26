@@ -7,16 +7,13 @@
         public Exam Exam { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
-        public int? Score { get; set; }
         public ExamStatusEnum Status { get; set; }
-        public DateTime? IssuedDate { get; set; }
-        public DateTime EnrollmentDate { get; set; }
+        public DateTime IssuedDate { get; set; }
        
     }
     public enum ExamStatusEnum : ushort
     {
-        Enrolled = 0,
+        NotPassed = 0,
         Passed = 1,
-        Failed = 2,
     }
 }

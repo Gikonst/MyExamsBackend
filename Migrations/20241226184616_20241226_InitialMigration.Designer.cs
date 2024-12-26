@@ -12,8 +12,8 @@ using MyExamsBackend.Domain;
 namespace MyExamsBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241220202301_20241220_CertificationModelModification")]
-    partial class _20241220_CertificationModelModification
+    [Migration("20241226184616_20241226_InitialMigration")]
+    partial class _20241226_InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -88,17 +88,11 @@ namespace MyExamsBackend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("EnrollmentDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("ExamId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("IssuedDate")
+                    b.Property<DateTime>("IssuedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("Score")
-                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -123,6 +117,14 @@ namespace MyExamsBackend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageSrc")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -144,14 +146,6 @@ namespace MyExamsBackend.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageSrc")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()

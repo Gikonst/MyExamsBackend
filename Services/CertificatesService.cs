@@ -24,39 +24,6 @@ namespace MyExamsBackend.Services
             _converter = converter;
         }
 
-        //Creating an enrollment certificate
-        public bool Enroll(CertificateRequestDTO createCertificateRequestDto)
-        {
-            bool certificateExists = _context.Certificates
-                .Any(c => c.UserId == createCertificateRequestDto.UserId && c.ExamId == createCertificateRequestDto.ExamId);
-
-            if (certificateExists)
-            {
-                return false;
-            }
-            
-            var mappedObject = CertificateRequestMapper.MapForEnrollment(createCertificateRequestDto);
-            _context.Certificates.Add(mappedObject);
-            var changed = _context.SaveChanges();
-
-            return changed > 0;
-        }
-
-        public bool FinalizeCertificate(CertificateRequestDTO certificateRequestDTO)
-        {
-            var dbObject = _context.Certificates.AsNoTracking()                
-                .FirstOrDefault(x => x.UserId == certificateRequestDTO.UserId && x.ExamId == certificateRequestDTO.ExamId && x.IssuedDate == null);
-
-            if (dbObject != null)
-            {
-                var updatedObject = CertificateRequestMapper.UpdateForFinalize(dbObject, certificateRequestDTO);
-                _context.Certificates.Update(dbObject);
-                var saveResults = _context.SaveChanges();
-
-                return saveResults > 0;
-            }
-            return false;
-        }
 
         public bool Delete(int id)
         {
@@ -105,7 +72,7 @@ namespace MyExamsBackend.Services
 
             var userFullName = $"{certificate.User.FirstName} {certificate.User.LastName}";
             var examName = certificate.Exam.Name;
-            var issuedDate = certificate.IssuedDate?.ToString("dd-MM-yyyy") ?? "N/A";
+            var issuedDate = certificate.IssuedDate.ToString("dd-MM-yyyy") ?? "N/A";
 
             string template = System.IO.File.ReadAllText("CertificateTemplate.html");
             string htmlContent = template.Replace("{{Name}}", userFullName)

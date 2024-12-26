@@ -9,8 +9,6 @@ namespace MyExamsBackend.Services.Interfaces
         public List<CertificateResponseDTO> GetByUserId(int id);
         public byte[] GenerateCertificate(int certificateId);
         public bool Create(CertificateRequestDTO createCertificateRequestDto, int examId, int userId);
-        public bool Enroll(CertificateRequestDTO createCertificateRequestDto);
-        public bool FinalizeCertificate(CertificateRequestDTO createCertificateRequestDto);
         public bool Delete(int id);
     }
 }

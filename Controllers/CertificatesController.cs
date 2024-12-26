@@ -43,27 +43,6 @@ namespace MyExamsBackend.Controllers
             return Ok(results);
         }
 
-        [HttpPost("Enroll")]
-        public IActionResult Enroll(CertificateRequestDTO createCertificateRequestDto)
-        {
-            var results = _certificatesService.Enroll(createCertificateRequestDto);
-            if(results == false)
-            {
-                return BadRequest("You already have passed this exam");
-            }
-            return Ok("Exam booked");
-        }
-
-        [HttpPut("FinalizeCertificate")]
-        public IActionResult FinalizeCertificate(CertificateRequestDTO createCertificateRequestDto)
-        {
-            var results = _certificatesService.FinalizeCertificate(createCertificateRequestDto);
-            if (results == false)
-            {
-                return BadRequest("There is no certificate to be finalized");
-            }
-            return Ok("New certificate created");
-        }
 
         [HttpPost("Create/{examId}/{userId}")]
         public IActionResult Create(CertificateRequestDTO createCertificateRequestDto, int examId, int userId)

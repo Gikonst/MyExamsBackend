@@ -23,10 +23,8 @@ namespace MyExamsBackend.Mappers.CertificateMappers
                     Description = certificate.Exam.Description
                 } : null,
                 UserId = certificate.UserId,
-                Score = certificate.Score ?? 0,
                 Status = certificate.Status,
                 IssuedDate = certificate.IssuedDate,
-                EnrollmentDate = certificate.EnrollmentDate
             };
         }
 

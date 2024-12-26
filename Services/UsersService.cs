@@ -54,23 +54,6 @@ namespace MyExamsBackend.Services
             {
                 FirstName = dbResult.FirstName,
                 LastName = dbResult.LastName,
-                EnrolledExams = dbResult.Certificates
-                .Where(c => c.IssuedDate == null)
-                .Select(cert => new CertificateResponseUserDTO
-                {
-                    Id = cert.Id,
-                    ExamId = cert.ExamId,
-                    UserId = cert.UserId,
-                    Exam = cert.Exam == null ? null : new ExamResponseCertificateDTO
-                    {
-                        Name = cert.Exam.Name,
-                        ImageSrc = cert.Exam.Name
-                    },
-                    Status = cert.Status,
-                    EnrollmentDate = cert.EnrollmentDate,
-                    IssuedDate = cert.IssuedDate
-                }).ToList(),
-
                 PassedCertificates = dbResult.Certificates
                 .Where(c => c.IssuedDate != null)
                 .Select(cert => new CertificateResponseUserDTO
@@ -81,10 +64,10 @@ namespace MyExamsBackend.Services
                     Exam = cert.Exam == null ? null : new ExamResponseCertificateDTO
                     {
                         Name = cert.Exam.Name,
-                        ImageSrc = cert.Exam.Name
+                        ImageSrc = cert.Exam.Name,
+                        Description = cert.Exam.Description,
                     },
                     Status = cert.Status,
-                    EnrollmentDate = cert.EnrollmentDate,
                     IssuedDate = cert.IssuedDate
 
                 }).
