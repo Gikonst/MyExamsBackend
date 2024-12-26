@@ -5,6 +5,7 @@ using MyExamsBackend.DTOs.AnswerDTOs;
 using MyExamsBackend.DTOs.ExamDTOs;
 using MyExamsBackend.DTOs.QuestionDTOs;
 using MyExamsBackend.DTOs.TestDTOs;
+using MyExamsBackend.Mappers.ExamMappers;
 using MyExamsBackend.Models;
 using MyExamsBackend.Services.Interfaces;
 
@@ -83,6 +84,8 @@ namespace MyExamsBackend.Services
                     Id = e.Id,
                     Name = e.Name,
                     ProgrammingLanguageId = e.ProgrammingLanguageId,
+                    ImageSrc = e.ImageSrc,
+                    Description = e.Description,
                     Questions = e.Questions.Select(q => new QuestionResponseDTO
                     {
                         Id = q.Id,
@@ -111,6 +114,8 @@ namespace MyExamsBackend.Services
                     Id = e.Id,
                     Name = e.Name,
                     ProgrammingLanguageId = e.ProgrammingLanguageId,
+                    ImageSrc = e.ImageSrc,
+                    Description = e.Description,
                     Questions = e.Questions.Select(q => new QuestionResponseDTO
                     {
                         Id = q.Id,
@@ -128,17 +133,35 @@ namespace MyExamsBackend.Services
             return dbResult;
         }
 
-        public bool Update(UpdateExamRequestDTO updateExamRequestDto) 
+        public bool Update(UpdateExamRequestDTO updateExamRequestDto)
         {
-            var dbObject = _context.Exams.AsNoTracking().Where(x => x.Id == updateExamRequestDto.Id).FirstOrDefault();
-            if(dbObject != null)
+            // Fetch the existing exam from the database
+            var existingExam = _context.Exams
+                .Include(e => e.Certificates)
+                .Include(e => e.Questions)
+                .Include(e => e.Users)
+                .FirstOrDefault(x => x.Id == updateExamRequestDto.Id);
+
+            if (existingExam == null)
             {
-                var mappedObject = _mapper.Map<Exam>(updateExamRequestDto);
-                _context.Exams.Update(mappedObject);
-                var saveResults = _context.SaveChanges();
-                return saveResults > 0;
+                return false; // Exam not found
             }
-            return false;
+
+            
+            UpdateExamMapper.MapForUpdate(updateExamRequestDto, existingExam);
+
+            
+            try
+            {
+                _context.Exams.Update(existingExam);
+                var saveResults = _context.SaveChanges();
+                return saveResults > 0; 
+            }
+            catch (Exception ex)
+            {
+                
+                return false;
+            }
         }
     }
 }

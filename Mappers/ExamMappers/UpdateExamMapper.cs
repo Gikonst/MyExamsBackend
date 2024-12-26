@@ -4,11 +4,17 @@ using MyExamsBackend.Models;
 
 namespace MyExamsBackend.Mappers.ExamMappers
 {
-    public class UpdateExamMapper : Profile
+    public static class UpdateExamMapper
     {
-        public UpdateExamMapper()
+        public static void MapForUpdate(UpdateExamRequestDTO dto, Exam exam)
         {
-            CreateMap<UpdateExamRequestDTO, Exam>();
+            // Update fields from the DTO
+            exam.Name = dto.Name;
+            exam.ImageSrc = dto.ImageSrc;
+            exam.Description = dto.Description;
+            exam.ProgrammingLanguageId = dto.ProgrammingLanguageId;
+
+
         }
     }
 }
