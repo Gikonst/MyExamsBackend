@@ -64,7 +64,7 @@ namespace MyExamsBackend.Services
                     Exam = cert.Exam == null ? null : new ExamResponseCertificateDTO
                     {
                         Name = cert.Exam.Name,
-                        ImageSrc = cert.Exam.Name,
+                        ImageSrc = cert.Exam.ImageSrc,
                         Description = cert.Exam.Description,
                     },
                     Status = cert.Status,
