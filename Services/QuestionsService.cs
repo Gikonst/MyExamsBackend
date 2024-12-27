@@ -69,6 +69,7 @@ namespace MyExamsBackend.Services
             return dbResult;
         }
 
+        //TODO Make this one! Create DTO and Mapper
         public bool Update(Question question)
         {
             var dbObject = _context.Questions.AsNoTracking().Where(x => x.Id == question.Id).FirstOrDefault();

@@ -47,7 +47,7 @@ namespace MyExamsBackend.Services
             return mappedResults;
         }
 
-        // TODO Shape the exam so they are not confused!
+        
         public List<CertificateResponseDTO> GetByUserId(int id)
         {
             var dbResult = _context.Certificates.Where(x => x.UserId == id)
