@@ -5,11 +5,18 @@ using MyExamsBackend.Models;
 
 namespace MyExamsBackend.Mappers.ExamMappers
 {
-    public class CreateExamMapper : Profile
+    public static class CreateExamMapper 
     {
-        public CreateExamMapper()
-        { 
-            CreateMap<CreateExamRequestDTO, Exam>();
+        public static Exam MapForExamCreate(CreateExamRequestDTO dto)
+        {
+            return new Exam
+            {
+                Name = dto.Name,
+                ImageSrc = dto.ImageSrc,
+                Description = dto.Description,
+                ProgrammingLanguageId = dto.ProgrammingLanguageId
+            };
+            
         }
     }
 }

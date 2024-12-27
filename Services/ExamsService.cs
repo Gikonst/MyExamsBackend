@@ -53,11 +53,23 @@ namespace MyExamsBackend.Services
 
         public bool Create(CreateExamRequestDTO createExamRequestDto)
         {
-            var mappedObject = _mapper.Map<Exam>(createExamRequestDto);
-            _context.Exams.Add(mappedObject);
-            var changed = _context.SaveChanges();
 
-            return changed > 0;
+            try
+            {
+                // Map DTO to Exam
+                var newExam = CreateExamMapper.MapForExamCreate(createExamRequestDto);
+
+                // Add new Exam to the context
+                _context.Exams.Add(newExam);
+
+                // Save changes to the database
+                var saveResult = _context.SaveChanges();
+                return saveResult > 0;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         public bool Delete(int id)

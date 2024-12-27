@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyExamsBackend.Domain;
 using MyExamsBackend.DTOs.QuestionDTOs;
+using MyExamsBackend.Mappers.QuestionMappers;
 using MyExamsBackend.Models;
 using MyExamsBackend.Services.Interfaces;
 
@@ -16,13 +17,25 @@ namespace MyExamsBackend.Services
 
         public bool Create(QuestionRequestDTO newQuestion)
         {
-            var question = new Question
+            // Find the related exam
+            var exam = _context.Exams.FirstOrDefault(e => e.Id == newQuestion.ExamId);
+
+            if (exam == null)
             {
-                QuestionText = newQuestion.QuestionText,
-                Answers = new List<Answer>(),
-                Exams = new List<Exam>()
-            };
+                // If the exam doesn't exist, return false or handle the error
+                return false;
+            }
+
+            // Use the mapper to create a Question object
+            var question = QuestionMapper.MapToQuestion(newQuestion);
+
+            // Associate the question with the exam
+            question.Exams.Add(exam);
+
+            // Add the question to the context
             _context.Questions.Add(question);
+
+            // Save changes to populate the ExamQuestion table
             var changed = _context.SaveChanges();
 
             return changed > 0;

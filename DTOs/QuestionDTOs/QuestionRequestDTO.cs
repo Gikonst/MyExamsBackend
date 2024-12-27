@@ -8,5 +8,7 @@ namespace MyExamsBackend.DTOs.QuestionDTOs
         [MinLength(15, ErrorMessage = "The question must be at least 15 characaters")]
         [MaxLength(200, ErrorMessage = "The question must not exceed 200 characaters")]
         public string QuestionText { get; set; }
+        [Required]
+        public int ExamId { get; set; }
     }
 }
