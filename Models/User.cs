@@ -18,8 +18,6 @@ namespace MyExamsBackend.Models
         public string Password { get; set; }
         [Required]
         public UserRoleType Role { get; set; }
-
-        
         public List<Exam> Exams { get; set; }
         public List<Certificate> Certificates { get; set; }
         public User()

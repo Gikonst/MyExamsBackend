@@ -41,8 +41,10 @@ namespace MyExamsBackend.Services
 
         public List<CertificateResponseDTO> GetAll()
         {
-            var dbResults = _context.Certificates.ToList();
-            var mappedResults = _mapper.Map<List<CertificateResponseDTO>>(dbResults);
+            var dbResults = _context.Certificates
+                .Include(c => c.Exam)
+                .ToList();
+            var mappedResults = CertificateMapper.ToResponseDTOList(dbResults);
 
             return mappedResults;
         }
