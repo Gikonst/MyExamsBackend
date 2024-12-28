@@ -19,7 +19,7 @@ namespace MyExamsBackend.Models
         [Required]
         public UserRoleType Role { get; set; }
 
-        //TODO Figure out how to update the intermediary table if certificate is passed
+        
         public List<Exam> Exams { get; set; }
         public List<Certificate> Certificates { get; set; }
         public User()

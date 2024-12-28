@@ -8,7 +8,7 @@ namespace MyExamsBackend.Mappers.CertificateMappers
     public static class CertificateRequestMapper
     {
 
-        public static Certificate MapForCreation(CertificateRequestDTO dto, int examId, int userId)
+        public static Certificate MapForCreation(int examId, int userId)
         {
             return new Certificate
             {
@@ -17,6 +17,14 @@ namespace MyExamsBackend.Mappers.CertificateMappers
                 Status = ExamStatusEnum.Passed,
                 IssuedDate = DateTime.Now
             };
+        }
+
+        public static void MapUserExamRelationship(User user, Exam exam)
+        {
+            if (!user.Exams.Contains(exam))
+            {
+                user.Exams.Add(exam); // Automatically updates the UserExams table
+            }
         }
 
 

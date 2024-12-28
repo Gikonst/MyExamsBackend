@@ -94,7 +94,7 @@ namespace MyExamsBackend.Services
             return _converter.Convert(pdfDocument);
         }
 
-        public bool Create(CertificateRequestDTO createCertificateRequestDto, int examId, int userId)
+        public bool Create(int examId, int userId)
         {
             bool certificateExists = _context.Certificates
                 .Any(c => c.UserId == userId && c.ExamId == examId);
@@ -104,7 +104,17 @@ namespace MyExamsBackend.Services
                 return false;
             }
 
-            var mappedObject = CertificateRequestMapper.MapForCreation(createCertificateRequestDto, examId, userId);
+            var user = _context.Users.Include(u => u.Exams).FirstOrDefault(u => u.Id == userId);
+            var exam = _context.Exams.Include(e => e.Users).FirstOrDefault(e => e.Id == examId);
+
+            if (user == null || exam == null)
+            {
+                return false;
+            }
+
+            var mappedObject = CertificateRequestMapper.MapForCreation(examId, userId);
+            CertificateRequestMapper.MapUserExamRelationship(user,exam);
+
             _context.Certificates.Add(mappedObject);
             var changed = _context.SaveChanges();
 
