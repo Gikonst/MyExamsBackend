@@ -66,8 +66,8 @@ namespace MyExamsBackend.Controllers
             return Ok("Certificate deleted");
         }
 
-        [HttpGet("{id}/download")]
-        public IActionResult DownloadCertificate(int id)
+        [HttpGet("download")]
+        public IActionResult DownloadCertificate([FromQuery] int id)
         {
             try
             {

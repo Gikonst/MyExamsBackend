@@ -12,7 +12,7 @@ namespace MyExamsBackend.Mappers.ExamMappers
             exam.Name = string.IsNullOrEmpty(dto.Name) ? exam.Name : dto.Name;
             exam.ImageSrc = string.IsNullOrEmpty(dto.ImageSrc) ? exam.ImageSrc : dto.ImageSrc;
             exam.Description = string.IsNullOrEmpty(dto.Description) ? exam.Description : dto.Description;
-            exam.ProgrammingLanguageId = dto.ProgrammingLanguageId;
+            exam.ProgrammingLanguageId = exam.ProgrammingLanguageId;
 
 
         }

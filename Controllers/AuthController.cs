@@ -61,7 +61,7 @@ namespace MyExamsBackend.Controllers
             }
             var token = new TokenGenerator(_configuration).GenerateJwtToken(user);
 
-            return Ok(new {token});
+            return Ok(new {token, userId = user.Id, userRole = user.Role});
         }
     }
 }
