@@ -29,8 +29,8 @@ namespace MyExamsBackend.Controllers
             return Ok(results);
         }
 
-        [HttpGet("GetById/{id}")]
-        public IActionResult GetById(int id)
+        [HttpGet("GetById")]
+        public IActionResult GetById([FromQuery]int id)
         {
             var results = _usersService.GetById(id);
             if (results == null)

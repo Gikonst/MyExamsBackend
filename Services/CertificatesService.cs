@@ -74,11 +74,13 @@ namespace MyExamsBackend.Services
 
             var userFullName = $"{certificate.User.FirstName} {certificate.User.LastName}";
             var examName = certificate.Exam.Name;
+            var description = certificate.Exam.Description;
             var issuedDate = certificate.IssuedDate.ToString("dd-MM-yyyy") ?? "N/A";
 
             string template = System.IO.File.ReadAllText("CertificateTemplate.html");
             string htmlContent = template.Replace("{{Name}}", userFullName)
                                          .Replace("{{ExamName}}", examName)
+                                         .Replace("{{Description}}", description)
                                          .Replace("{{IssuedDate}}", issuedDate);
 
             var pdfDocument = new HtmlToPdfDocument()

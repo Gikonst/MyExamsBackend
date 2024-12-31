@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Certificate of Achievement</title>
     <style>
+        /* Define styles for the body */
         body {
             font-family: 'Georgia', serif;
             margin: 0;
@@ -13,20 +14,24 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh; /* Fill the viewport */
         }
 
+        /* Certificate container styling */
         .certificate-container {
             background: #ffffff;
             border: 10px solid #4a90e2;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            width: 80%;
-            max-width: 900px;
+            width: 1169px; /* Width for A4 Landscape */
+            height: 827px; /* Height for A4 Landscape */
             padding: 40px;
             text-align: center;
             position: relative;
+            overflow: hidden; /* Ensure overflow is hidden */
+            box-sizing: border-box; /* Include padding in width/height */
         }
 
+            /* Optional border effect */
             .certificate-container::before {
                 content: '';
                 position: absolute;
@@ -38,37 +43,43 @@
                 pointer-events: none;
             }
 
+        /* Main title styles */
         h1 {
-            font-size: 2.5rem;
+            font-size: 3rem; /* Increased title size */
             color: #4a90e2;
             margin: 0;
+            padding: 10px; /* Added padding for spacing */
         }
 
+        /* Subtitle styles */
         .subtitle {
-            font-size: 1.2rem;
+            font-size: 1.5rem; /* Increased subtitle size */
             color: #555;
             margin: 10px 0 20px;
         }
 
+        /* Recipient name styles */
         .recipient-name {
-            font-size: 2rem;
+            font-size: 2.5rem; /* Increased name size */
             color: #222;
             font-weight: bold;
             margin: 20px 0;
         }
 
+        /* Detail text styles */
         .details {
-            font-size: 1.1rem;
+            font-size: 1.2rem; /* Increased details size */
             color: #333;
             margin: 10px 0;
         }
 
+        /* Footer styling */
         .certificate-footer {
             margin-top: 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.9rem;
+            font-size: 1rem; /* Increased footer size */
         }
 
             .certificate-footer div {
@@ -78,20 +89,24 @@
             .certificate-footer .signature {
                 font-style: italic;
                 color: #4a90e2;
-                font-size: 1rem;
+                font-size: 1rem; /* Signature size */
                 border-top: 1px solid #333;
                 margin-top: 10px;
             }
 
+        /* Logo styles */
         .logo {
-            width: 80px;
+            width: 100px; /* Increased logo size */
             margin: 0 auto 20px;
         }
 
+        /* Responsive design adjustments */
         @media (max-width: 768px) {
             .certificate-container {
                 padding: 20px;
                 font-size: 90%;
+                width: 100%; /* Make it responsive */
+                height: auto; /* Adjust height for responsiveness */
             }
 
             h1 {
@@ -115,7 +130,7 @@
         <p class="subtitle">This is proudly presented to</p>
         <p class="recipient-name">{{Name}}</p>
         <p class="details">For successfully completing the exam</p>
-        <p class="details"><strong>{{ExamName}}</strong></p>
+        <p class="details"><strong>{{ExamName}}</strong> - {{Description}} </p>
         <p class="details">Issued on {{IssuedDate}}</p>
 
         <div class="certificate-footer">

@@ -26,17 +26,23 @@ namespace MyExamsBackend.Controllers
         public IActionResult Register([FromBody] RegisterUserDTO registerUser)
         {
             if(!ModelState.IsValid)
-                return BadRequest(ModelState);
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
+                return BadRequest(new { messages = errors });
+            }
 
             if(_context.Users.Any(u => u.Email == registerUser.Email))
                 return BadRequest(new {message = "Email already exists"});
 
             var newUser = new User
             {
-                FirstName = registerUser.FirstName,
-                LastName = registerUser.LastName,
-                Email = registerUser.Email,
-                Password = registerUser.Password,
+                FirstName = registerUser.FirstName.Trim(),
+                LastName = registerUser.LastName.Trim(),
+                Email = registerUser.Email.Trim(),
+                Password = registerUser.Password.Trim(),
                 Role = UserRoleType.User
             };
 
@@ -61,7 +67,7 @@ namespace MyExamsBackend.Controllers
             }
             var token = new TokenGenerator(_configuration).GenerateJwtToken(user);
 
-            return Ok(new {token, userId = user.Id, userRole = user.Role});
+            return Ok(new {token, userId = user.Id, userRole = user.Role,});
         }
     }
 }

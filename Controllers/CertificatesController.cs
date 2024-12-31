@@ -44,8 +44,8 @@ namespace MyExamsBackend.Controllers
         }
 
 
-        [HttpPost("Create/{examId}/{userId}")]
-        public IActionResult Create(int examId, int userId)
+        [HttpPost("Create/{examId}")]
+        public IActionResult Create(int examId, [FromQuery]int userId)
         {
             var results = _certificatesService.Create( examId, userId);
             if (results == false)

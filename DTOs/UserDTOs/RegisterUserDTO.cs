@@ -10,7 +10,7 @@ namespace MyExamsBackend.DTOs.UserDTOs
         public string FirstName { get; set; }
 
         [Required]
-        [MinLength(2, ErrorMessage = "The First Name be at least 2 characters.")]
+        [MinLength(2, ErrorMessage = "The Last Name be at least 2 characters.")]
         [MaxLength(50, ErrorMessage = "The Last Name must not exceed 50 characters.")]
         public string LastName { get; set; }
 
