@@ -43,17 +43,35 @@ namespace MyExamsBackend.Controllers
         [HttpPost("Create")]
         public IActionResult Create(ProgrammingLanguageRequestDTO createProgrammingLanguageRequestDto)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
+                return BadRequest(new { message = "Validation errors occurred.", errors });
+            }
+
             var results = _programmingLanguagesService.Create(createProgrammingLanguageRequestDto);
             if (results == false)
             {
                 return BadRequest("Invalid programming language");
             }
-            return Ok("Programming language created");
+            return Ok(new {message = "Programming language created"});
         }
 
         [HttpPut("Update")]
         public IActionResult Update(ProgrammingLanguageRequestDTO programmingLanguageRequestDto)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
+                return BadRequest(new { message = "Validation errors occurred.", errors });
+            }
+
             var results = _programmingLanguagesService.Update(programmingLanguageRequestDto);
             if (results == false)
             {

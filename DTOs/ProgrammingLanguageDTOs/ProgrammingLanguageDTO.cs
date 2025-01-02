@@ -7,10 +7,6 @@ namespace MyExamsBackend.DTOs.ProgrammingLanguageDTOs
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<ExamResponseDTO> Exams { get; set; }
-        public ProgrammingLanguageDTO()
-        {
-            Exams = new List<ExamResponseDTO>();
-        }
+        
     }
 }

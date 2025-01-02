@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyExamsBackend.Domain;
+using MyExamsBackend.DTOs.AnswerDTOs;
+using MyExamsBackend.DTOs.ExamDTOs;
 using MyExamsBackend.DTOs.QuestionDTOs;
 using MyExamsBackend.Mappers.QuestionMappers;
 using MyExamsBackend.Models;
@@ -55,10 +57,29 @@ namespace MyExamsBackend.Services
             return false;
         }
 
-        public List<Question> GetAll()
+        public List<QuestionResponseDTO> GetAll()
         {
-            var dbResults = _context.Questions.Include(q => q.Answers).ToList();
-
+            var dbResults = _context.Questions
+                .Include(q => q.Answers)
+                .Include(q => q.Exams)
+                 .Select(q => new QuestionResponseDTO // Assuming you have a QuestionDTO to return
+                 {
+                     Id = q.Id,
+                     QuestionText = q.QuestionText, 
+                     Answers = q.Answers.Select(a => new AnswerResponseDTO
+                     {
+                         Id = a.Id,
+                         AnswerText = a.AnswerText,
+                         IsCorrect = a.IsCorrect,
+                     }).ToList(),
+                     Exams = q.Exams.Select(e => new ExamResponseQuestionDTO // Map the Exams to DTO
+                     {
+                         Id = e.Id,
+                         Name = e.Name
+                     }).ToList(),
+                 })
+                .ToList();
+                
             return dbResults;
         }
 
@@ -70,17 +91,47 @@ namespace MyExamsBackend.Services
         }
 
         //TODO Make this one! Create DTO and Mapper
-        public bool Update(Question question)
+        public bool Update(UpdateQuestionRequestDTO questionDTO)
         {
-            var dbObject = _context.Questions.AsNoTracking().Where(x => x.Id == question.Id).FirstOrDefault();
+            
+            var dbObject = _context.Questions
+                .Include(q => q.Exams) 
+                .Include(q => q.Answers) 
+                .FirstOrDefault(x => x.Id == questionDTO.Id);
+
             if (dbObject != null)
             {
-                _context.Questions.Update(question);
-                var SaveResults = _context.SaveChanges();
-                return SaveResults > 0;
+                
+                dbObject.QuestionText = questionDTO.QuestionText;
+
+                
+                var newExam = _context.Exams.Find(questionDTO.ExamId);
+                if (newExam != null)
+                {
+                    
+                    var existingExam = dbObject.Exams.FirstOrDefault(e => e.Id == newExam.Id);
+
+                    if (existingExam == null)
+                    {
+                        
+                        dbObject.Exams.Clear(); 
+                        dbObject.Exams.Add(newExam); 
+                    }
+                   
+                }
+                else
+                {
+                    
+                    return false; 
+                }
+
+                
+                _context.SaveChanges();
+                return true;
             }
             return false;
-
         }
+
+
     }
 }
