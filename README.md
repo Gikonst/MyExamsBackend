@@ -42,17 +42,16 @@ https://github.com/your-repo/exam-certification-platform.git
 
 Paste under "AllowedHosts": "*",:
   ```json
-  {
-      "JwtSettings": {
-        "Key": "EnterYour32CharacterKeyHere",
-        "Issuer": "YourApp",
-        "Audience": "YourAppAudience",
-        "DurationInMinutes": 60,
-      },
-      "ConnectionStrings": {
-        "DefaultConnection": ""
-      }
+  "JwtSettings": {
+    "Key": "EnterYour32CharacterKeyHere",
+    "Issuer": "YourApp",
+    "Audience": "YourAppAudience",
+    "DurationInMinutes": 60,
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": ""
   }
+  ```
 
 3. Open NuGet Package Concole in Visual Studio:
 Type: "Add-Migration Initial_Create" + Press Enter
