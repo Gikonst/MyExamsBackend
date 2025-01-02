@@ -54,9 +54,12 @@ Paste under "AllowedHosts": "*",:
   ```
 
 3. Open NuGet Package Concole in Visual Studio:
-Type: "Add-Migration Initial_Create" + Press Enter
+```bash  
+Add-Migration Initial_Create
+```
 
-After it is built successfully type: Update_Database
-
+```bash
+Update_Database
+```
 # Voila you are ready to go!
 
