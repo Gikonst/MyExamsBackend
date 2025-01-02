@@ -41,14 +41,17 @@ https://github.com/your-repo/exam-certification-platform.git
 2. Go to appsettings.json:
 
 Paste under "AllowedHosts": "*",:
-  "JwtSettings": {
-    "Key": "EnterYour32CharacterKeyHere",
-    "Issuer": "YourApp",
-    "Audience": "YourAppAudience",
-    "DurationInMinutes": 60,
-  },
-  "ConnectionStrings": {
-    "DefaultConnection": ""
+  ```json
+  {
+      "JwtSettings": {
+        "Key": "EnterYour32CharacterKeyHere",
+        "Issuer": "YourApp",
+        "Audience": "YourAppAudience",
+        "DurationInMinutes": 60,
+      },
+      "ConnectionStrings": {
+        "DefaultConnection": ""
+      }
   }
 
 3. Open NuGet Package Concole in Visual Studio:
