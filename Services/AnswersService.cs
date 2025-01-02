@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using MyExamsBackend.Domain;
 using MyExamsBackend.DTOs.AnswerDTOs;
+using MyExamsBackend.DTOs.QuestionDTOs;
 using MyExamsBackend.Models;
 using MyExamsBackend.Services.Interfaces;
 
@@ -41,13 +42,30 @@ namespace MyExamsBackend.Services
             }
             return false;
         }
-      
+
         public List<AnswerResponseDTO> GetAll()
         {
-            var dbResults = _context.Answers.ToList();
-            var mappedResults  = _mapper.Map<List<AnswerResponseDTO>>(dbResults);
-            return mappedResults;
+            // Fetch answers with related questions from the database
+            var dbResults = _context.Answers
+                .Include(a => a.Question) // Eagerly load the related Question
+                .Select(a => new AnswerResponseDTO
+                {
+                    Id = a.Id,
+                    AnswerText = a.AnswerText,
+                    IsCorrect = a.IsCorrect,
+                    Question = a.Question != null
+                        ? new QuestionResponseAnswerDTO
+                        {
+                            Id = a.Question.Id,
+                            QuestionText = a.Question.QuestionText
+                        }
+                        : null
+                })
+                .ToList();
+
+            return dbResults; // Return the results directly
         }
+
 
         public AnswerResponseDTO GetById(int id)
         {

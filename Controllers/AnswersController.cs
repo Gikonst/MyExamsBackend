@@ -44,23 +44,40 @@ namespace MyExamsBackend.Controllers
         [HttpPost("Create")]
         public IActionResult Create(AnswerRequestDTO createAnswerRequestDto)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
+                return BadRequest(new { message = "Validation errors occurred.", errors });
+            }
+
             var results = _answersService.Create(createAnswerRequestDto);
             if(results == false)
             {
-                return BadRequest("Invalid answer");
+                return BadRequest(new { message = "Failed to create answer" });
             }
-            return Ok("New answer created");
+            return Ok(new { message = "New answer created" });
         }
 
         [HttpPut("Update")]
         public IActionResult Update(AnswerRequestDTO updateAnswerRequestDto)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
+                return BadRequest(new { message = "Validation errors occurred.", errors });
+            }
             var results = _answersService.Update(updateAnswerRequestDto);
             if(results == false)
             {
-                return BadRequest("Invalid answer");
+                return BadRequest(new { message = "Invalid answer" });
             }
-            return Ok("Answer updated");
+            return Ok(new { message = "Answer updated" });
         }
 
         [HttpDelete("Delete")]

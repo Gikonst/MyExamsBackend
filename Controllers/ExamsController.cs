@@ -45,6 +45,14 @@ namespace MyExamsBackend.Controllers
         [HttpPost("Create")]
         public IActionResult Create(CreateExamRequestDTO createExamRequestDto)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
+                return BadRequest(new { message = "Validation errors occurred.", errors });
+            }
             var results = _examsService.Create(createExamRequestDto);
             if(results == false)
             {
@@ -56,12 +64,20 @@ namespace MyExamsBackend.Controllers
         [HttpPut("Update")]
         public IActionResult Update(UpdateExamRequestDTO updateExamRequestDto)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
+                return BadRequest(new { message = "Validation errors occurred.", errors });
+            }
             var results = _examsService.Update(updateExamRequestDto);
             if(results == false)
             {
                 return BadRequest("Invalid exam");
             }
-            return Ok("Exam updated");
+            return Ok("Exam updated" );
         }
 
         [HttpDelete("Delete")]

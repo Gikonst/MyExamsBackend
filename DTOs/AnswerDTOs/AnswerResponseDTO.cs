@@ -1,4 +1,5 @@
-﻿using MyExamsBackend.Models;
+﻿using MyExamsBackend.DTOs.QuestionDTOs;
+using MyExamsBackend.Models;
 
 namespace MyExamsBackend.DTOs.AnswerDTOs
 {
@@ -8,5 +9,6 @@ namespace MyExamsBackend.DTOs.AnswerDTOs
         public int Id { get; set; }
         public string AnswerText { get; set; }
         public bool IsCorrect { get; set; }
+        public QuestionResponseAnswerDTO Question {  get; set; }
     }
 }
