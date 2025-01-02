@@ -56,5 +56,5 @@ Type: "Add-Migration Initial_Create" + Press Enter
 
 After it is built successfully type: Update_Database
 
-Voila you are ready to go!
+#Voila you are ready to go!
 
