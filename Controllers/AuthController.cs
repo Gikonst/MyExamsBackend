@@ -23,7 +23,7 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register([FromBody] RegisterUserDTO registerUser)
+        public async Task<IActionResult> Register([FromBody] RegisterUserDTO registerUser)
         {
             if(!ModelState.IsValid)
             {
@@ -46,14 +46,14 @@ namespace MyExamsBackend.Controllers
                 Role = UserRoleType.User
             };
 
-            _context.Users.Add(newUser);
-            _context.SaveChanges();
+            await _context.Users.AddAsync(newUser);
+            await _context.SaveChangesAsync();
 
             return Ok(new {mewssage = "User registered successfully"});
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginUserDto loginUser)
+        public async Task<IActionResult> Login([FromBody] LoginUserDto loginUser)
         {
             var user = _context.Users.SingleOrDefault(u => u.Email == loginUser.Email);
 
