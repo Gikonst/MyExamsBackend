@@ -19,34 +19,34 @@ namespace MyExamsBackend.Services
             _mapper = mapper;
         }
 
-        //TODO Needs DTO and mapper
-        public bool Create(AnswerRequestDTO createAnswerRequestDto)
+        
+        public async Task<bool> CreateAsync(AnswerRequestDTO createAnswerRequestDto)
         {
 
             var mappedObject = _mapper.Map<Answer>(createAnswerRequestDto);
-            _context.Answers.Add(mappedObject);
-            var changed = _context.SaveChanges();
+            await _context.Answers.AddAsync(mappedObject);
+            var changed = await _context.SaveChangesAsync();
 
             return changed > 0;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            var dbResult = _context.Answers.Where(x => x.Id == id).FirstOrDefault();
+            var dbResult = await _context.Answers.Where(x => x.Id == id).FirstOrDefaultAsync();
             if (dbResult != null)
             {
                 _context.Answers.Remove(dbResult);
-                var deletedResult = _context.SaveChanges();
+                var deletedResult = await _context.SaveChangesAsync();
 
                 return deletedResult > 0;
             }
             return false;
         }
 
-        public List<AnswerResponseDTO> GetAll()
+        public async Task<List<AnswerResponseDTO>> GetAllAsync()
         {
             // Fetch answers with related questions from the database
-            var dbResults = _context.Answers
+            var dbResults = await _context.Answers
                 .Include(a => a.Question) // Eagerly load the related Question
                 .Select(a => new AnswerResponseDTO
                 {
@@ -61,29 +61,29 @@ namespace MyExamsBackend.Services
                         }
                         : null
                 })
-                .ToList();
+                .ToListAsync();
 
             return dbResults; // Return the results directly
         }
 
 
-        public AnswerResponseDTO GetById(int id)
+        public async Task<AnswerResponseDTO> GetByIdAsync(int id)
         {
-            var dbResult = _context.Answers.Where(x => x.Id == id).FirstOrDefault();
+            var dbResult = await _context.Answers.Where(x => x.Id == id).FirstOrDefaultAsync();
             var mappedResult = _mapper.Map<AnswerResponseDTO>(dbResult);
 
             return mappedResult;
         }
 
-        public bool Update(AnswerRequestDTO updateAnswerRequestDto)
+        public async Task<bool> UpdateAsync(AnswerRequestDTO updateAnswerRequestDto)
         {
-            var dbObject = _context.Answers.AsNoTracking().Where(x => x.Id == updateAnswerRequestDto.Id).FirstOrDefault();
+            var dbObject = _context.Answers.AsNoTracking().Where(x => x.Id == updateAnswerRequestDto.Id).FirstOrDefaultAsync();
 
             if(dbObject != null)
             {
                 var mappedResults = _mapper.Map<Answer>(updateAnswerRequestDto);
-                _context.Answers.Update(mappedResults);
-                var saveResults = _context.SaveChanges();
+                 _context.Answers.Update(mappedResults);
+                var saveResults = await _context.SaveChangesAsync();
 
                 return saveResults > 0;
             }

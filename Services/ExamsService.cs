@@ -22,21 +22,23 @@ namespace MyExamsBackend.Services
             _mapper = mapper;   
         }
 
-        public (double Score, bool Passed) CalculateScore(int examId, List<TestUserAnswersDTO> userAnswers)
+        public async Task<(double Score, bool Passed)> CalculateScoreAsync(int examId, List<TestUserAnswersDTO> userAnswers)
         {
-            var questions = _context.Questions
+            var questions = await _context.Questions
            .Include(q => q.Answers)
            .Where(q => q.Exams.Any(e => e.Id == examId))
-           .ToList();
+           .ToListAsync();
 
             int totalQuestions = questions.Count;
             int correctAnswersCount = 0;
 
+            var questionDictionary = questions.ToDictionary(q => q.Id);
+
             foreach (var userAnswer in userAnswers)
             {
-                var question = questions.FirstOrDefault(q => q.Id == userAnswer.QuestionId);
-                if (question != null)
+                if (questionDictionary.TryGetValue(userAnswer.QuestionId, out var question))
                 {
+                    // Find the selected answer in the question's answers
                     var selectedAnswer = question.Answers.FirstOrDefault(a => a.Id == userAnswer.SelectedAnswerId);
                     if (selectedAnswer != null && selectedAnswer.IsCorrect)
                     {
@@ -51,7 +53,7 @@ namespace MyExamsBackend.Services
             return (score, passed);
         }
 
-        public bool Create(CreateExamRequestDTO createExamRequestDto)
+        public async Task<bool> CreateAsync(CreateExamRequestDTO createExamRequestDto)
         {
 
             try
@@ -60,10 +62,10 @@ namespace MyExamsBackend.Services
                 var newExam = CreateExamMapper.MapForExamCreate(createExamRequestDto);
 
                 // Add new Exam to the context
-                _context.Exams.Add(newExam);
+                await _context.Exams.AddAsync(newExam);
 
                 // Save changes to the database
-                var saveResult = _context.SaveChanges();
+                var saveResult = await _context.SaveChangesAsync();
                 return saveResult > 0;
             }
             catch (Exception ex)
@@ -72,23 +74,23 @@ namespace MyExamsBackend.Services
             }
         }
 
-        public bool Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            var dbResult = _context.Exams.Where(x => x.Id == id).FirstOrDefault();
+            var dbResult = await _context.Exams.Where(x => x.Id == id).FirstOrDefaultAsync();
 
             if(dbResult != null)
             {
                 _context.Exams.Remove(dbResult);
-                var deleteResult = _context.SaveChanges();
+                var deleteResult = await _context.SaveChangesAsync();
 
                 return deleteResult > 0;
             }
             return false;
         }
 
-        public List<ExamResponseDTO> GetAll()
+        public async Task<List<ExamResponseDTO>> GetAllAsync()
         {
-            var dbResults = _context.Exams
+            var dbResults = await _context.Exams
                 .Include(e => e.Questions)
                 .ThenInclude(q => q.Answers)
                 .Select(e => new ExamResponseDTO
@@ -110,14 +112,14 @@ namespace MyExamsBackend.Services
                         }).ToList()
                     }).ToList()
                 })
-                .ToList();
+                .ToListAsync();
 
             return dbResults;
         }
 
-        public ExamResponseDTO GetById(int id)
+        public async Task<ExamResponseDTO> GetByIdAsync(int id)
         {
-            var dbResult = _context.Exams
+            var dbResult = await _context.Exams
                 .Where(x => x.Id == id)
                 .Include(e => e.Questions)
                 .ThenInclude(q => q.Answers)
@@ -140,19 +142,19 @@ namespace MyExamsBackend.Services
                         }).ToList()
                     }).ToList()
                 })
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             return dbResult;
         }
 
-        public bool Update(UpdateExamRequestDTO updateExamRequestDto)
+        public async Task<bool> UpdateAsync(UpdateExamRequestDTO updateExamRequestDto)
         {
             // Fetch the existing exam from the database
-            var existingExam = _context.Exams
+            var existingExam = await _context.Exams
                 .Include(e => e.Certificates)
                 .Include(e => e.Questions)
                 .Include(e => e.Users)
-                .FirstOrDefault(x => x.Id == updateExamRequestDto.Id);
+                .FirstOrDefaultAsync(x => x.Id == updateExamRequestDto.Id);
 
             if (existingExam == null)
             {
@@ -166,7 +168,7 @@ namespace MyExamsBackend.Services
             try
             {
                 _context.Exams.Update(existingExam);
-                var saveResults = _context.SaveChanges();
+                var saveResults = await _context.SaveChangesAsync();
                 return saveResults > 0; 
             }
             catch (Exception ex)

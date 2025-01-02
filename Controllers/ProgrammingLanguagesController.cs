@@ -19,9 +19,9 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpGet("GetAll")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var results = _programmingLanguagesService.GetAll();
+            var results = await _programmingLanguagesService.GetAllAsync();
             if (!results.Any())
             {
                 return NotFound("No programming language found");
@@ -30,9 +30,9 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpGet("GetById")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var results = _programmingLanguagesService.GetById(id);
+            var results = await _programmingLanguagesService.GetByIdAsync(id);
             if (results == null)
             {
                 return NotFound("Could not find the programming language requested");
@@ -41,7 +41,7 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpPost("Create")]
-        public IActionResult Create(ProgrammingLanguageRequestDTO createProgrammingLanguageRequestDto)
+        public async Task<IActionResult> Create(ProgrammingLanguageRequestDTO createProgrammingLanguageRequestDto)
         {
             if (!ModelState.IsValid)
             {
@@ -52,7 +52,7 @@ namespace MyExamsBackend.Controllers
                 return BadRequest(new { message = "Validation errors occurred.", errors });
             }
 
-            var results = _programmingLanguagesService.Create(createProgrammingLanguageRequestDto);
+            var results = await _programmingLanguagesService.CreateAsync(createProgrammingLanguageRequestDto);
             if (results == false)
             {
                 return BadRequest("Invalid programming language");
@@ -61,7 +61,7 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpPut("Update")]
-        public IActionResult Update(ProgrammingLanguageRequestDTO programmingLanguageRequestDto)
+        public async Task<ActionResult> Update(ProgrammingLanguageRequestDTO programmingLanguageRequestDto)
         {
             if (!ModelState.IsValid)
             {
@@ -72,7 +72,7 @@ namespace MyExamsBackend.Controllers
                 return BadRequest(new { message = "Validation errors occurred.", errors });
             }
 
-            var results = _programmingLanguagesService.Update(programmingLanguageRequestDto);
+            var results = await _programmingLanguagesService.UpdateAsync(programmingLanguageRequestDto);
             if (results == false)
             {
                 return BadRequest("Invalid programming language");
@@ -81,9 +81,9 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpDelete("Delete")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var results = _programmingLanguagesService.Delete(id);
+            var results = await _programmingLanguagesService.DeleteAsync(id);
             if (results == false)
             {
                 return BadRequest("Could not find the programming language requested");

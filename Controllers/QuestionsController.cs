@@ -19,9 +19,9 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpGet("GetAll")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var results = _QuestionsService.GetAll();
+            var results = await _QuestionsService.GetAllAsync();
             if (!results.Any())
             {
                 return NotFound();
@@ -30,9 +30,9 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpGet("GetById")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var results = _QuestionsService.GetById(id);
+            var results = await _QuestionsService.GetByIdAsync(id);
             if (results == null)
             {
                 return NotFound();
@@ -41,7 +41,7 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpPost("Create")]
-        public IActionResult Create(QuestionRequestDTO newQuestion)
+        public async Task<IActionResult> Create(QuestionRequestDTO newQuestion)
         {
             if (!ModelState.IsValid)
             {
@@ -52,7 +52,7 @@ namespace MyExamsBackend.Controllers
                 return BadRequest(new { message = "Validation errors occurred.", errors });
             }
 
-            var results = _QuestionsService.Create(newQuestion);
+            var results = await _QuestionsService.CreateAsync(newQuestion);
             if (results == false)
             {
                 return BadRequest(new { message = "Failed to create question." });
@@ -61,9 +61,9 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpPut("Update")]
-        public IActionResult Update(UpdateQuestionRequestDTO questionDTO)
+        public async Task<IActionResult> Update(UpdateQuestionRequestDTO questionDTO)
         {
-            var results = _QuestionsService.Update(questionDTO);
+            var results = await _QuestionsService.UpdateAsync(questionDTO);
             if (results == false)
             {
                 return BadRequest();
@@ -73,9 +73,9 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpDelete("Delete")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var results = _QuestionsService.Delete(id);
+            var results = await _QuestionsService.DeleteAsync(id);
             if (results == false)
             {
                 return BadRequest();

@@ -5,10 +5,10 @@ namespace MyExamsBackend.Services.Interfaces
 {
     public interface IQuestionsService
     {
-        public List<QuestionResponseDTO> GetAll();
-        public Question GetById(int id);
-        public bool Create(QuestionRequestDTO newQuestion);
-        public bool Update(UpdateQuestionRequestDTO question);
-        public bool Delete(int id);
+        public Task<List<QuestionResponseDTO>> GetAllAsync();
+        public Task<Question> GetByIdAsync(int id);
+        public Task<bool> CreateAsync(QuestionRequestDTO newQuestion);
+        public Task<bool> UpdateAsync(UpdateQuestionRequestDTO question);
+        public Task<bool> DeleteAsync(int id);
     }
 }

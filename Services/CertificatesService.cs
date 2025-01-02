@@ -25,36 +25,36 @@ namespace MyExamsBackend.Services
         }
 
 
-        public bool Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            var dbResult = _context.Certificates.Where(x => x.Id == id).FirstOrDefault();
+            var dbResult = await _context.Certificates.Where(x => x.Id == id).FirstOrDefaultAsync();
 
             if (dbResult != null)
             {
                 _context.Certificates.Remove(dbResult);
-                var deleteResult = _context.SaveChanges();
+                var deleteResult = await _context.SaveChangesAsync();
 
                 return deleteResult > 0;
             }
             return false;
         }
 
-        public List<CertificateResponseDTO> GetAll()
+        public async Task<List<CertificateResponseDTO>> GetAllAsync()
         {
-            var dbResults = _context.Certificates
+            var dbResults = await _context.Certificates
                 .Include(c => c.Exam)
-                .ToList();
+                .ToListAsync();
             var mappedResults = CertificateMapper.ToResponseDTOList(dbResults);
 
             return mappedResults;
         }
 
         
-        public List<CertificateResponseDTO> GetByUserId(int id)
+        public async Task<List<CertificateResponseDTO>> GetByUserIdAsync(int id)
         {
-            var dbResult = _context.Certificates.Where(x => x.UserId == id)
+            var dbResult = await _context.Certificates.Where(x => x.UserId == id)
                 .Include(c => c.Exam)
-                .ToList();
+                .ToListAsync();
 
             var mappedResults = CertificateMapper.ToResponseDTOList(dbResult);
 
@@ -62,12 +62,12 @@ namespace MyExamsBackend.Services
         }
 
 
-        public byte[] GenerateCertificate(int certificateId)
+        public async Task<byte[]> GenerateCertificateAsync(int certificateId)
         {
-            var certificate = _context.Certificates
+            var certificate = await _context.Certificates
                 .Include(c => c.User)
                 .Include(c => c.Exam)
-                .FirstOrDefault(c => c.Id == certificateId && c.IssuedDate != null);
+                .FirstOrDefaultAsync(c => c.Id == certificateId && c.IssuedDate != null);
 
             if (certificate == null)
                 throw new ArgumentException("Invalid certificate ID or certificate has not been issued.");
@@ -77,7 +77,7 @@ namespace MyExamsBackend.Services
             var description = certificate.Exam.Description;
             var issuedDate = certificate.IssuedDate.ToString("dd-MM-yyyy") ?? "N/A";
 
-            string template = System.IO.File.ReadAllText("CertificateTemplate.html");
+            string template = await System.IO.File.ReadAllTextAsync("CertificateTemplate.html");
             string htmlContent = template.Replace("{{Name}}", userFullName)
                                          .Replace("{{ExamName}}", examName)
                                          .Replace("{{Description}}", description)
@@ -94,22 +94,22 @@ namespace MyExamsBackend.Services
                 },
                 Objects = { new ObjectSettings { HtmlContent = htmlContent } }
             };
-
-            return _converter.Convert(pdfDocument);
+            byte[] pdfBytes = await Task.Run(() => _converter.Convert(pdfDocument));
+            return pdfBytes;
         }
 
-        public bool Create(int examId, int userId)
+        public async Task<bool> CreateAsync(int examId, int userId)
         {
-            bool certificateExists = _context.Certificates
-                .Any(c => c.UserId == userId && c.ExamId == examId);
+            bool certificateExists = await _context.Certificates
+                .AnyAsync(c => c.UserId == userId && c.ExamId == examId);
 
             if (certificateExists)
             {
                 return false;
             }
 
-            var user = _context.Users.Include(u => u.Exams).FirstOrDefault(u => u.Id == userId);
-            var exam = _context.Exams.Include(e => e.Users).FirstOrDefault(e => e.Id == examId);
+            var user = await _context.Users.Include(u => u.Exams).FirstOrDefaultAsync(u => u.Id == userId);
+            var exam = await _context.Exams.Include(e => e.Users).FirstOrDefaultAsync(e => e.Id == examId);
 
             if (user == null || exam == null)
             {
@@ -119,8 +119,8 @@ namespace MyExamsBackend.Services
             var mappedObject = CertificateRequestMapper.MapForCreation(examId, userId);
             CertificateRequestMapper.MapUserExamRelationship(user,exam);
 
-            _context.Certificates.Add(mappedObject);
-            var changed = _context.SaveChanges();
+            await _context.Certificates.AddAsync(mappedObject);
+            var changed = await _context.SaveChangesAsync();
 
             return changed > 0;
         }

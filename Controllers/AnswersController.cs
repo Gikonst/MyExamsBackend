@@ -20,9 +20,9 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpGet("GetAll")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var results = _answersService.GetAll();
+            var results = await  _answersService.GetAllAsync();
             if (!results.Any())
             {
                 return NotFound("No answer found");
@@ -31,9 +31,9 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpGet("GetById")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var results = _answersService.GetById(id);
+            var results = await _answersService.GetByIdAsync(id);
             if(results == null)
             {
                 return NotFound("Could not find the answer requested");
@@ -42,7 +42,7 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpPost("Create")]
-        public IActionResult Create(AnswerRequestDTO createAnswerRequestDto)
+        public async Task<IActionResult> Create(AnswerRequestDTO createAnswerRequestDto)
         {
             if (!ModelState.IsValid)
             {
@@ -53,7 +53,7 @@ namespace MyExamsBackend.Controllers
                 return BadRequest(new { message = "Validation errors occurred.", errors });
             }
 
-            var results = _answersService.Create(createAnswerRequestDto);
+            var results = await _answersService.CreateAsync(createAnswerRequestDto);
             if(results == false)
             {
                 return BadRequest(new { message = "Failed to create answer" });
@@ -62,7 +62,7 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpPut("Update")]
-        public IActionResult Update(AnswerRequestDTO updateAnswerRequestDto)
+        public async Task<IActionResult> Update(AnswerRequestDTO updateAnswerRequestDto)
         {
             if (!ModelState.IsValid)
             {
@@ -72,7 +72,7 @@ namespace MyExamsBackend.Controllers
                     .ToList();
                 return BadRequest(new { message = "Validation errors occurred.", errors });
             }
-            var results = _answersService.Update(updateAnswerRequestDto);
+            var results = await _answersService.UpdateAsync(updateAnswerRequestDto);
             if(results == false)
             {
                 return BadRequest(new { message = "Invalid answer" });
@@ -81,9 +81,9 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpDelete("Delete")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            var results = _answersService.Delete(id);
+            var results = await _answersService.DeleteAsync(id);
             if(results == false)
             {
                 return BadRequest("Could not find the answer requested");

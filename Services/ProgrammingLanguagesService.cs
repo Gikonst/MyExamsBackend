@@ -17,53 +17,53 @@ namespace MyExamsBackend.Services
             _mapper = mapper;
         }
 
-        public bool Create(ProgrammingLanguageRequestDTO createProgrammingLanguageRequestDto)
+        public async Task<bool> CreateAsync(ProgrammingLanguageRequestDTO createProgrammingLanguageRequestDto)
         {
             var mappedObject = _mapper.Map<ProgrammingLanguage>(createProgrammingLanguageRequestDto);
-            _context.ProgrammingLanguages.Add(mappedObject);
-            var changed = _context.SaveChanges();
+            await _context.ProgrammingLanguages.AddAsync(mappedObject);
+            var changed = await _context.SaveChangesAsync();
 
             return changed > 0;
         }
 
-        public bool Delete(int id)
+        public async Task <bool> DeleteAsync(int id)
         {
-            var dbResult = _context.ProgrammingLanguages.Where(x => x.Id == id).FirstOrDefault();
+            var dbResult = await _context.ProgrammingLanguages.Where(x => x.Id == id).FirstOrDefaultAsync();
 
             if (dbResult != null)
             { 
               _context.ProgrammingLanguages.Remove(dbResult);
-              var DeleteResult = _context.SaveChanges();
+              var DeleteResult = await _context.SaveChangesAsync();
 
               return DeleteResult > 0;             
             }
             return false;
         }
 
-        public List<ProgrammingLanguageDTO> GetAll()
+        public async Task<List<ProgrammingLanguageDTO>> GetAllAsync()
         {
-            var dbResults = _context.ProgrammingLanguages.ToList();
+            var dbResults = await _context.ProgrammingLanguages.ToListAsync();
             var mappedResults = _mapper.Map<List<ProgrammingLanguageDTO>>(dbResults);
 
             return mappedResults;
         }
 
-        public ProgrammingLanguageDTO GetById(int id)
+        public async Task<ProgrammingLanguageDTO> GetByIdAsync(int id)
         {
-            var dbResult = _context.ProgrammingLanguages.Where(x => x.Id == id).FirstOrDefault();
+            var dbResult = await _context.ProgrammingLanguages.Where(x => x.Id == id).FirstOrDefaultAsync();
             var mappedResult = _mapper.Map<ProgrammingLanguageDTO>(dbResult);
 
             return mappedResult;
         }
 
-        public bool Update(ProgrammingLanguageRequestDTO ProgrammingLanguageRequestDto)
+        public async Task<bool> UpdateAsync(ProgrammingLanguageRequestDTO ProgrammingLanguageRequestDto)
         {
-            var dbObject = _context.ProgrammingLanguages.AsNoTracking().Where(x => x.Id == ProgrammingLanguageRequestDto.Id).FirstOrDefault();
+            var dbObject = await _context.ProgrammingLanguages.AsNoTracking().Where(x => x.Id == ProgrammingLanguageRequestDto.Id).FirstOrDefaultAsync();
             if (dbObject != null)
             { 
                 var mappedObject = _mapper.Map<ProgrammingLanguage>(ProgrammingLanguageRequestDto);
                 _context.ProgrammingLanguages.Update(mappedObject);
-                var SaveResults = _context.SaveChanges();
+                var SaveResults = await _context.SaveChangesAsync();
                 return SaveResults > 0;
             }
             return false;

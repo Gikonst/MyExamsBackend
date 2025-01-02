@@ -17,49 +17,47 @@ namespace MyExamsBackend.Services
             _context = context;
         }
 
-        public bool Create(QuestionRequestDTO newQuestion)
+        public async Task<bool> CreateAsync(QuestionRequestDTO newQuestion)
         {
-            // Find the related exam
-            var exam = _context.Exams.FirstOrDefault(e => e.Id == newQuestion.ExamId);
+            
+            var exam = await _context.Exams.FirstOrDefaultAsync(e => e.Id == newQuestion.ExamId);
 
             if (exam == null)
             {
-                // If the exam doesn't exist, return false or handle the error
+                
                 return false;
             }
 
-            // Use the mapper to create a Question object
             var question = QuestionMapper.MapToQuestion(newQuestion);
 
-            // Associate the question with the exam
             question.Exams.Add(exam);
 
             // Add the question to the context
-            _context.Questions.Add(question);
+            await _context.Questions.AddAsync(question);
 
             // Save changes to populate the ExamQuestion table
-            var changed = _context.SaveChanges();
+            var changed = await _context.SaveChangesAsync();
 
             return changed > 0;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            var dbResult = _context.Questions.Where(x => x.Id == id).FirstOrDefault();
+            var dbResult = await _context.Questions.Where(x => x.Id == id).FirstOrDefaultAsync();
 
             if (dbResult != null)
             {
                 _context.Questions.Remove(dbResult);
-                var DeleteResult = _context.SaveChanges();
+                var DeleteResult = await _context.SaveChangesAsync();
 
                 return DeleteResult > 0;
             }
             return false;
         }
 
-        public List<QuestionResponseDTO> GetAll()
+        public async Task<List<QuestionResponseDTO>> GetAllAsync()
         {
-            var dbResults = _context.Questions
+            var dbResults = await _context.Questions
                 .Include(q => q.Answers)
                 .Include(q => q.Exams)
                  .Select(q => new QuestionResponseDTO // Assuming you have a QuestionDTO to return
@@ -78,26 +76,26 @@ namespace MyExamsBackend.Services
                          Name = e.Name
                      }).ToList(),
                  })
-                .ToList();
+                .ToListAsync();
                 
             return dbResults;
         }
 
-        public Question GetById(int id)
+        public async Task<Question> GetByIdAsync(int id)
         {
-            var dbResult = _context.Questions.Where(x => x.Id == id).FirstOrDefault();
+            var dbResult = await _context.Questions.Where(x => x.Id == id).FirstOrDefaultAsync();
 
             return dbResult;
         }
 
-        //TODO Make this one! Create DTO and Mapper
-        public bool Update(UpdateQuestionRequestDTO questionDTO)
+        
+        public async Task<bool> UpdateAsync(UpdateQuestionRequestDTO questionDTO)
         {
             
-            var dbObject = _context.Questions
+            var dbObject = await _context.Questions
                 .Include(q => q.Exams) 
                 .Include(q => q.Answers) 
-                .FirstOrDefault(x => x.Id == questionDTO.Id);
+                .FirstOrDefaultAsync(x => x.Id == questionDTO.Id);
 
             if (dbObject != null)
             {
@@ -105,7 +103,7 @@ namespace MyExamsBackend.Services
                 dbObject.QuestionText = questionDTO.QuestionText;
 
                 
-                var newExam = _context.Exams.Find(questionDTO.ExamId);
+                var newExam = await _context.Exams.FindAsync(questionDTO.ExamId);
                 if (newExam != null)
                 {
                     
@@ -123,10 +121,8 @@ namespace MyExamsBackend.Services
                 {
                     
                     return false; 
-                }
-
-                
-                _context.SaveChanges();
+                }           
+                await _context.SaveChangesAsync();
                 return true;
             }
             return false;

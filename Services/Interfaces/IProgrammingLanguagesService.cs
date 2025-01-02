@@ -5,11 +5,11 @@ namespace MyExamsBackend.Services.Interfaces
 {
     public interface IProgrammingLanguagesService
     {
-        public List<ProgrammingLanguageDTO> GetAll();
-        public ProgrammingLanguageDTO GetById(int id);
-        public bool Create(ProgrammingLanguageRequestDTO createProgrammingLanguageRequestDto);
-        public bool Update(ProgrammingLanguageRequestDTO ProgrammingLanguageRequestDto);
-        public bool Delete(int id);
+        public Task<List<ProgrammingLanguageDTO>> GetAllAsync();
+        public Task<ProgrammingLanguageDTO> GetByIdAsync(int id);
+        public Task<bool> CreateAsync(ProgrammingLanguageRequestDTO createProgrammingLanguageRequestDto);
+        public Task<bool> UpdateAsync(ProgrammingLanguageRequestDTO ProgrammingLanguageRequestDto);
+        public Task<bool> DeleteAsync(int id);
     }
 }
 

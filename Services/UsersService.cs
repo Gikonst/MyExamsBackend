@@ -16,34 +16,34 @@ namespace MyExamsBackend.Services
             _context = context;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            var dbResult = _context.Users.Where(x => x.Id == id).FirstOrDefault();
+            var dbResult = await _context.Users.Where(x => x.Id == id).FirstOrDefaultAsync();
 
             if (dbResult != null)
             {
                 _context.Users.Remove(dbResult);
-                var DeleteResult = _context.SaveChanges();
+                var DeleteResult = await _context.SaveChangesAsync();
 
                 return DeleteResult > 0;
             }
             return false;
         }
 
-        public List<User> GetAll()
+        public async Task<List<User>> GetAllAsync()
         {
-            var dbResults = _context.Users.ToList();
+            var dbResults = await _context.Users.ToListAsync();
 
             return dbResults;
         }
 
-        public UserResponseDTO GetById(int id)
+        public async Task<UserResponseDTO> GetByIdAsync(int id)
         {
-            var dbResult = _context.Users
+            var dbResult = await _context.Users
                 .Where(x => x.Id == id)
                 .Include(c => c.Certificates)
                 .ThenInclude(c => c.Exam)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (dbResult == null)
             {
@@ -77,9 +77,9 @@ namespace MyExamsBackend.Services
             return userResponse;
         }
 
-        public bool Update(UpdateUserRequestDTO updateUser)
+        public async Task<bool> UpdateAsync(UpdateUserRequestDTO updateUser)
         {
-            var dbObject = _context.Users.AsNoTracking().Where(x => x.Id == updateUser.Id).FirstOrDefault();
+            var dbObject = await _context.Users.AsNoTracking().Where(x => x.Id == updateUser.Id).FirstOrDefaultAsync();
             if (dbObject != null)
             {
                 var user = new User
@@ -94,7 +94,7 @@ namespace MyExamsBackend.Services
                     Certificates = dbObject.Certificates
                 };
                 _context.Users.Update(user);
-                var SaveResults = _context.SaveChanges();
+                var SaveResults = await _context.SaveChangesAsync();
                 return SaveResults > 0;
             }
             return false;

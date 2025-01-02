@@ -21,9 +21,9 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpGet("GetAll")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var results = _examsService.GetAll();
+            var results = await _examsService.GetAllAsync();
             if(!results.Any())
             {
                 return NotFound("No exam found");
@@ -32,9 +32,9 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpGet("GetById/{id}")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var results = _examsService.GetById(id);
+            var results = await _examsService.GetByIdAsync(id);
             if(results == null)
             {
                 return NotFound("Could not find the exam requested");
@@ -43,7 +43,7 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpPost("Create")]
-        public IActionResult Create(CreateExamRequestDTO createExamRequestDto)
+        public async Task<IActionResult> Create(CreateExamRequestDTO createExamRequestDto)
         {
             if (!ModelState.IsValid)
             {
@@ -53,7 +53,7 @@ namespace MyExamsBackend.Controllers
                     .ToList();
                 return BadRequest(new { message = "Validation errors occurred.", errors });
             }
-            var results = _examsService.Create(createExamRequestDto);
+            var results = await _examsService.CreateAsync(createExamRequestDto);
             if(results == false)
             {
                 return BadRequest("Invalid exam");
@@ -62,7 +62,7 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpPut("Update")]
-        public IActionResult Update(UpdateExamRequestDTO updateExamRequestDto)
+        public async Task<IActionResult> Update(UpdateExamRequestDTO updateExamRequestDto)
         {
             if (!ModelState.IsValid)
             {
@@ -72,7 +72,7 @@ namespace MyExamsBackend.Controllers
                     .ToList();
                 return BadRequest(new { message = "Validation errors occurred.", errors });
             }
-            var results = _examsService.Update(updateExamRequestDto);
+            var results = await _examsService.UpdateAsync(updateExamRequestDto);
             if(results == false)
             {
                 return BadRequest("Invalid exam");
@@ -81,9 +81,9 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpDelete("Delete")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var results = _examsService.Delete(id);
+            var results = await _examsService.DeleteAsync(id);
             if (results == false)
             {
                 return BadRequest("Could not find the exam requested");
@@ -92,7 +92,7 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpPost("submit/{examId}")]
-        public IActionResult SubmitAnswers(int examId, [FromBody] List<TestUserAnswersDTO> userAnswers)
+        public async Task<IActionResult> SubmitAnswersAsync(int examId, [FromBody] List<TestUserAnswersDTO> userAnswers)
         {
             if (userAnswers == null || !userAnswers.Any())
             {
@@ -100,7 +100,7 @@ namespace MyExamsBackend.Controllers
             }
 
             // Call the service method to calculate score and pass status
-            var (score, passed) = _examsService.CalculateScore(examId, userAnswers);
+            var (score, passed) = await _examsService.CalculateScoreAsync(examId, userAnswers);
 
             return Ok(new
             {

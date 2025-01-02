@@ -21,9 +21,9 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpGet("GetAll")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var results = _certificatesService.GetAll();
+            var results = await _certificatesService.GetAllAsync();
             if(!results.Any())
             {
                 return NotFound("No Certificate found");
@@ -33,9 +33,9 @@ namespace MyExamsBackend.Controllers
 
         [HttpGet("GetByUserId")]
       
-        public IActionResult GetByUserId(int id)
+        public async Task<IActionResult> GetByUserId(int id)
         {
-            var results = _certificatesService.GetByUserId(id);
+            var results = await _certificatesService.GetByUserIdAsync(id);
             if(results == null)
             {
                 return NotFound("Could not find the certificate requested");
@@ -45,9 +45,9 @@ namespace MyExamsBackend.Controllers
 
 
         [HttpPost("Create/{examId}")]
-        public IActionResult Create(int examId, [FromQuery]int userId)
+        public async Task<IActionResult> Create(int examId, [FromQuery]int userId)
         {
-            var results = _certificatesService.Create( examId, userId);
+            var results = await _certificatesService.CreateAsync( examId, userId);
             if (results == false)
             {
                 return BadRequest("You have already passed this exam");
@@ -56,9 +56,9 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpDelete("Delete")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var results = _certificatesService.Delete(id);
+            var results = await _certificatesService.DeleteAsync(id);
             if(results == false)
             {
                 return BadRequest("Could not find the certificate requested");
@@ -67,12 +67,12 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpGet("download")]
-        public IActionResult DownloadCertificate([FromQuery] int id)
+        public async Task<IActionResult> DownloadCertificate([FromQuery] int id)
         {
             try
             {
                 // Generate the certificate PDF
-                byte[] pdfBytes = _certificatesService.GenerateCertificate(id);
+                byte[] pdfBytes = await _certificatesService.GenerateCertificateAsync(id);
 
                
                 return File(pdfBytes, "application/pdf", "Certificate.pdf");

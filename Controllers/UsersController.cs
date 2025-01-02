@@ -19,9 +19,9 @@ namespace MyExamsBackend.Controllers
 
         [HttpGet("GetAll")]
         [Authorize(Policy = "AdminPolicy")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var results = _usersService.GetAll();
+            var results = await _usersService.GetAllAsync();
             if (!results.Any())
             {
                 return NotFound();
@@ -30,9 +30,9 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpGet("GetById")]
-        public IActionResult GetById([FromQuery]int id)
+        public async Task<IActionResult> GetById([FromQuery]int id)
         {
-            var results = _usersService.GetById(id);
+            var results = await _usersService.GetByIdAsync(id);
             if (results == null)
             {
                 return NotFound();
@@ -41,9 +41,9 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpPut("Update")]
-        public IActionResult Update(UpdateUserRequestDTO updateUser)
+        public async Task<IActionResult> Update(UpdateUserRequestDTO updateUser)
         {
-            var results = _usersService.Update(updateUser);
+            var results = await _usersService.UpdateAsync(updateUser);
             if (results == false)
             {
                 return BadRequest();
@@ -52,9 +52,9 @@ namespace MyExamsBackend.Controllers
         }
 
         [HttpDelete("Delete")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var results = _usersService.Delete(id);
+            var results = await _usersService.DeleteAsync(id);
             if ( results == false)
             {
                 return BadRequest();

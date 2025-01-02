@@ -5,9 +5,9 @@ namespace MyExamsBackend.Services.Interfaces
 {
     public interface IUsersService
     {
-        public List<User> GetAll();
-        public UserResponseDTO GetById(int id);
-        public bool Update(UpdateUserRequestDTO updateUser);
-        public bool Delete(int id);
+        public Task<List<User>> GetAllAsync();
+        public Task<UserResponseDTO> GetByIdAsync(int id);
+        public Task<bool> UpdateAsync(UpdateUserRequestDTO updateUser);
+        public Task<bool> DeleteAsync(int id);
     }
 }
